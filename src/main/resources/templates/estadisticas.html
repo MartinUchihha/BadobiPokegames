@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Estadísticas | Badobi Pokégames</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header class="main-header">
+    <a class="logo" th:href="@{/}">
+        Badobi <span>Pokégames</span>
+    </a>
+
+    <nav class="main-nav">
+        <a th:href="@{/}">Juegos</a>
+        <a
+                class="active"
+                th:href="@{/estadisticas}"
+        >
+            Estadísticas
+        </a>
+        <a th:href="@{/ranking}">Ranking</a>
+        <a th:href="@{/logros}">Logros</a>
+    </nav>
+    <button
+            id="theme-toggle"
+            class="theme-toggle"
+            type="button"
+            aria-label="Activar tema oscuro"
+            title="Cambiar tema"
+    >
+        🌙
+    </button>
+</header>
+
+<main class="stats-page">
+    <a class="back-link" th:href="@{/pokedle}">
+        ← Volver a Pokédle
+    </a>
+
+    <section class="stats-hero">
+        <p class="eyebrow">Tu progreso</p>
+        <h1>Estadísticas de Pokédle</h1>
+
+        <p>
+            Consulta tus partidas, victorias, rachas
+            y mejores resultados.
+        </p>
+    </section>
+
+    <section class="stats-grid">
+        <article class="stat-card">
+            <span class="stat-icon">🎮</span>
+            <p>Partidas jugadas</p>
+            <strong id="stat-played">0</strong>
+        </article>
+
+        <article class="stat-card">
+            <span class="stat-icon">🏆</span>
+            <p>Victorias</p>
+            <strong id="stat-victories">0</strong>
+        </article>
+
+        <article class="stat-card">
+            <span class="stat-icon">❌</span>
+            <p>Derrotas</p>
+            <strong id="stat-defeats">0</strong>
+        </article>
+
+        <article class="stat-card">
+            <span class="stat-icon">📈</span>
+            <p>Porcentaje de victoria</p>
+            <strong id="stat-win-rate">0%</strong>
+        </article>
+
+        <article class="stat-card">
+            <span class="stat-icon">🎯</span>
+            <p>Mejor partida</p>
+            <strong id="stat-best-attempts">—</strong>
+        </article>
+
+        <article class="stat-card">
+            <span class="stat-icon">📊</span>
+            <p>Promedio de intentos</p>
+            <strong id="stat-average-attempts">—</strong>
+        </article>
+
+        <article class="stat-card">
+            <span class="stat-icon">🔥</span>
+            <p>Racha actual</p>
+            <strong id="stat-current-streak">0</strong>
+        </article>
+
+        <article class="stat-card">
+            <span class="stat-icon">⭐</span>
+            <p>Mejor racha</p>
+            <strong id="stat-best-streak">0</strong>
+        </article>
+    </section>
+
+    <section class="stats-time-card">
+        <div>
+            <span>⏱</span>
+
+            <div>
+                <p>Tiempo total jugando</p>
+                <strong id="stat-total-time">00:00</strong>
+            </div>
+        </div>
+
+        <button id="reset-stats" type="button">
+            Reiniciar estadísticas
+        </button>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>
+        Badobi Pokégames — Creado por
+        <a
+                href="https://www.youtube.com/@Badobipkm"
+                target="_blank"
+                rel="noopener noreferrer"
+        >
+            Badobi
+        </a>
+    </p>
+
+    <p class="fan-disclaimer">
+        Proyecto fan no oficial, sin afiliación con Nintendo,
+        Game Freak, Creatures Inc. ni The Pokémon Company.
+    </p>
+
+    <p class="api-credit">
+        Datos e imágenes obtenidos mediante
+        <a
+                href="https://pokeapi.co/"
+                target="_blank"
+                rel="noopener noreferrer"
+        >
+            PokéAPI
+        </a>.
+    </p>
+</footer>
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/estadisticas.js}"></script>
+
+</body>
+</html>

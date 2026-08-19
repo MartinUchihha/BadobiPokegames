@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Badobi Pokégames</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header class="main-header">
+    <a class="logo" th:href="@{/}">
+        Badobi <span>Pokégames</span>
+    </a>
+
+    <nav class="main-nav">
+        <a th:href="@{/}">Juegos</a>
+        <a th:href="@{/estadisticas}">Estadísticas</a>
+        <a th:href="@{/ranking}">Ranking</a>
+        <a th:href="@{/logros}">Logros</a>
+    </nav>
+    <button
+        id="theme-toggle"
+        class="theme-toggle"
+        type="button"
+        aria-label="Activar tema oscuro"
+        title="Cambiar tema"
+>
+    🌙
+</button>
+</header>
+
+<main>
+    <section class="hero home-hero">
+        <p class="eyebrow">Pon a prueba tus conocimientos</p>
+
+        <h1>¿Cuánto sabes de Pokémon?</h1>
+
+        <p class="hero-description">
+            Adivina Pokémon, compara estadísticas, reconoce sonidos
+            y supera desafíos de todas las generaciones.
+        </p>
+
+        <div class="generation-selector">
+            <label for="generation">Generación:</label>
+
+            <select id="generation" name="generation">
+                <option value="all">Todas</option>
+                <option value="1">Generación I</option>
+                <option value="2">Generación II</option>
+                <option value="3">Generación III</option>
+                <option value="4">Generación IV</option>
+                <option value="5">Generación V</option>
+                <option value="6">Generación VI</option>
+                <option value="7">Generación VII</option>
+                <option value="8">Generación VIII</option>
+                <option value="9">Generación IX</option>
+            </select>
+        </div>
+    </section>
+
+    <section class="games-section">
+        <h2>Elige un juego</h2>
+
+        <div class="games-grid">
+            <article class="game-card featured">
+                <div class="game-icon">⚡</div>
+                <h3>Pokédle</h3>
+                <p>Adivina el Pokémon del día utilizando las pistas.</p>
+                <a class="play-button" th:href="@{/pokedle}">Jugar</a>
+            </article>
+
+            <article class="game-card">
+                <div class="game-icon">📈</div>
+                <h3>Higher or Lower</h3>
+                <p>Decide qué Pokémon tiene la estadística más alta.</p>
+                <a class="play-button" href="#">Jugar</a>
+            </article>
+
+            <article class="game-card">
+                <div class="game-icon">👤</div>
+                <h3>Siluetas</h3>
+                <p>Reconoce al Pokémon observando únicamente su silueta.</p>
+                <a class="play-button" href="#">Jugar</a>
+            </article>
+
+            <article class="game-card">
+                <div class="game-icon">🔊</div>
+                <h3>Sonidos</h3>
+                <p>Escucha el grito e identifica a qué Pokémon pertenece.</p>
+                <a class="play-button" href="#">Jugar</a>
+            </article>
+
+            <article class="game-card">
+                <div class="game-icon">❓</div>
+                <h3>Trivia</h3>
+                <p>Responde preguntas sobre el mundo Pokémon.</p>
+                <a class="play-button" href="#">Jugar</a>
+            </article>
+
+            <article class="game-card">
+                <div class="game-icon">📊</div>
+                <h3>Adivina por estadísticas</h3>
+                <p>Descubre el Pokémon a partir de sus estadísticas base.</p>
+                <a class="play-button" href="#">Jugar</a>
+            </article>
+
+            <article class="game-card">
+                <div class="game-icon">💥</div>
+                <h3>Adivina por movimientos</h3>
+                <p>Identifica el Pokémon por los movimientos que aprende.</p>
+                <a class="play-button" href="#">Jugar</a>
+            </article>
+
+            <article class="game-card">
+                <div class="game-icon">⚔️</div>
+                <h3>Stat Battle</h3>
+                <p>Elige una estadística y vence al Pokémon rival.</p>
+                <a class="play-button" href="#">Jugar</a>
+            </article>
+        </div>
+    </section>
+    <section class="creator-section">
+        <div class="creator-card">
+
+
+            <div class="creator-content">
+                <img
+                        class="creator-avatar"
+                        th:src="@{/images/creator/badobi-profile.jpeg}"
+                        alt="Foto de perfil del canal Badobi"
+                >
+
+                <div class="creator-information">
+                    <p class="creator-label">
+                        Creador de Badobi Pokégames
+                    </p>
+
+                    <h2>Badobi</h2>
+
+                    <p class="creator-handle">
+                        @Badobipkm
+                    </p>
+
+                    <p class="creator-description">
+                        Contenido de Pokémon, videojuegos y mucho más.
+                        Visita mi canal para acompañarme en nuevas
+                        aventuras.
+                    </p>
+                </div>
+
+                <a
+                        class="youtube-button"
+                        href="https://www.youtube.com/@Badobipkm"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Visitar el canal de Badobi en YouTube"
+                >
+                    <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                    >
+                        <path
+                                d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5
+                            3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3
+                            3 0 0 0 .5 6.2 31 31 0 0 0 0
+                            12a31 31 0 0 0 .5 5.8 3 3 0 0
+                            0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5
+                            0 9.4-.5a3 3 0 0 0 2.1-2.1A31
+                            31 0 0 0 24 12a31 31 0 0
+                            0-.5-5.8ZM9.6 15.6V8.4l6.3
+                            3.6-6.3 3.6Z"
+                        />
+                    </svg>
+
+                    Visitar mi canal
+                </a>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>
+        Badobi Pokégames — Creado por
+        <a
+                href="https://www.youtube.com/@Badobipkm"
+                target="_blank"
+                rel="noopener noreferrer"
+        >
+            Badobi
+        </a>
+    </p>
+
+    <p class="fan-disclaimer">
+        Proyecto fan no oficial, sin afiliación con Nintendo,
+        Game Freak, Creatures Inc. ni The Pokémon Company.
+    </p>
+
+    <p class="api-credit">
+        Datos e imágenes obtenidos mediante
+        <a
+                href="https://pokeapi.co/"
+                target="_blank"
+                rel="noopener noreferrer"
+        >
+            PokéAPI
+        </a>.
+    </p>
+</footer>
+<script th:src="@{/js/theme.js}"></script>
+</body>
+</html>

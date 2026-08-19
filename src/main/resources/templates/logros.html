@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Logros | Badobi Pokégames</title>
+
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header class="main-header">
+  <a class="logo" th:href="@{/}">
+    Badobi <span>Pokégames</span>
+  </a>
+
+  <nav class="main-nav">
+    <a th:href="@{/}">Juegos</a>
+    <a th:href="@{/estadisticas}">Estadísticas</a>
+    <a th:href="@{/ranking}">Ranking</a>
+    <a class="active" th:href="@{/logros}">Logros</a>
+  </nav>
+
+  <button
+          id="theme-toggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Activar tema oscuro"
+          title="Cambiar tema"
+  >
+    🌙
+  </button>
+</header>
+
+<main class="achievements-page">
+  <a class="back-link" th:href="@{/pokedle}">
+    ← Volver a Pokédle
+  </a>
+
+  <section class="achievements-hero">
+    <p class="eyebrow">Tu colección</p>
+    <h1>Logros</h1>
+
+    <p>
+      Juega partidas, consigue victorias y mejora
+      tus resultados para desbloquearlos todos.
+    </p>
+
+    <div class="achievements-progress">
+      <div>
+        <span>Progreso</span>
+        <strong id="achievements-count">0 / 8</strong>
+      </div>
+
+      <div class="progress-track">
+        <div
+                id="achievements-progress-bar"
+                class="progress-value"
+        ></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="achievements-grid">
+
+    <article id="achievement-first-game"
+             class="achievement-card locked">
+      <span class="achievement-lock">🔒</span>
+      <span class="achievement-icon">🎮</span>
+      <h2>Primeros pasos</h2>
+      <p>Completa tu primera partida.</p>
+    </article>
+
+    <article id="achievement-first-win"
+             class="achievement-card locked">
+      <span class="achievement-lock">🔒</span>
+      <span class="achievement-icon">🏆</span>
+      <h2>Primera victoria</h2>
+      <p>Encuentra tu primer Pokémon oculto.</p>
+    </article>
+
+    <article id="achievement-first-try"
+             class="achievement-card locked">
+      <span class="achievement-lock">🔒</span>
+      <span class="achievement-icon">🎯</span>
+      <h2>¡A la primera!</h2>
+      <p>Gana una partida con un solo intento.</p>
+    </article>
+
+    <article id="achievement-five-wins"
+             class="achievement-card locked">
+      <span class="achievement-lock">🔒</span>
+      <span class="achievement-icon">⭐</span>
+      <h2>Entrenador Pokémon</h2>
+      <p>Consigue cinco victorias.</p>
+    </article>
+
+    <article id="achievement-streak-three"
+             class="achievement-card locked">
+      <span class="achievement-lock">🔒</span>
+      <span class="achievement-icon">🔥</span>
+      <h2>En racha</h2>
+      <p>Consigue tres victorias consecutivas.</p>
+    </article>
+
+    <article id="achievement-ten-games"
+             class="achievement-card locked">
+      <span class="achievement-lock">🔒</span>
+      <span class="achievement-icon">🧭</span>
+      <h2>Explorador</h2>
+      <p>Completa diez partidas.</p>
+    </article>
+
+    <article id="achievement-fifty-attempts"
+             class="achievement-card locked">
+      <span class="achievement-lock">🔒</span>
+      <span class="achievement-icon">🧠</span>
+      <h2>Persistencia</h2>
+      <p>Realiza cincuenta intentos en total.</p>
+    </article>
+
+    <article id="achievement-twenty-five-wins"
+             class="achievement-card locked">
+      <span class="achievement-lock">🔒</span>
+      <span class="achievement-icon">👑</span>
+      <h2>Maestro Pokédle</h2>
+      <p>Consigue veinticinco victorias.</p>
+    </article>
+
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>
+    Badobi Pokégames — Creado por
+    <a
+            href="https://www.youtube.com/@Badobipkm"
+            target="_blank"
+            rel="noopener noreferrer"
+    >
+      Badobi
+    </a>
+  </p>
+
+  <p class="fan-disclaimer">
+    Proyecto fan no oficial, sin afiliación con Nintendo,
+    Game Freak, Creatures Inc. ni The Pokémon Company.
+  </p>
+
+  <p class="api-credit">
+    Datos e imágenes obtenidos mediante
+    <a
+            href="https://pokeapi.co/"
+            target="_blank"
+            rel="noopener noreferrer"
+    >
+      PokéAPI
+    </a>.
+  </p>
+</footer>
+
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/logros.js}"></script>
+
+</body>
+</html>

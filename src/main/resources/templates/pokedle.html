@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pokédle | Badobi Pokégames</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header class="main-header">
+    <a class="logo" th:href="@{/}">
+        Badobi <span>Pokégames</span>
+    </a>
+
+    <nav class="main-nav">
+        <a th:href="@{/}">Juegos</a>
+        <a th:href="@{/estadisticas}">Estadísticas</a>
+        <a th:href="@{/ranking}">Ranking</a>
+        <a th:href="@{/logros}">Logros</a>
+    </nav>
+    <button
+            id="theme-toggle"
+            class="theme-toggle"
+            type="button"
+            aria-label="Activar tema oscuro"
+            title="Cambiar tema"
+    >
+        🌙
+    </button>
+</header>
+
+<main class="game-page">
+    <a class="back-link" th:href="@{/}">
+        ← Volver a los juegos
+    </a>
+
+    <section class="pokedle-container">
+        <p class="eyebrow">Desafío diario</p>
+
+        <h1>Pokédle</h1>
+
+        <p class="game-description">
+            Adivina el Pokémon oculto. Después de cada intento recibirás
+            pistas para acercarte a la respuesta.
+        </p>
+        <form
+                class="game-settings"
+                th:action="@{/pokedle/nueva-partida}"
+                method="post"
+        >
+            <label for="pokedle-generation">Generación:</label>
+
+            <select
+                    id="pokedle-generation"
+                    name="generation"
+            >
+                <option
+                        value="all"
+                        th:selected="${generacionSeleccionada == 'all'}"
+                >
+                    Todas
+                </option>
+
+                <option value="1"
+                        th:selected="${generacionSeleccionada == '1'}">
+                    Generación I
+                </option>
+
+                <option value="2"
+                        th:selected="${generacionSeleccionada == '2'}">
+                    Generación II
+                </option>
+
+                <option value="3"
+                        th:selected="${generacionSeleccionada == '3'}">
+                    Generación III
+                </option>
+
+                <option value="4"
+                        th:selected="${generacionSeleccionada == '4'}">
+                    Generación IV
+                </option>
+
+                <option value="5"
+                        th:selected="${generacionSeleccionada == '5'}">
+                    Generación V
+                </option>
+
+                <option value="6"
+                        th:selected="${generacionSeleccionada == '6'}">
+                    Generación VI
+                </option>
+
+                <option value="7"
+                        th:selected="${generacionSeleccionada == '7'}">
+                    Generación VII
+                </option>
+
+                <option value="8"
+                        th:selected="${generacionSeleccionada == '8'}">
+                    Generación VIII
+                </option>
+
+                <option value="9"
+                        th:selected="${generacionSeleccionada == '9'}">
+                    Generación IX
+                </option>
+            </select>
+            <label for="game-mode">Modo:</label>
+
+            <select id="game-mode" name="gameMode">
+                <option
+                        value="normal"
+                        th:selected="${modoSeleccionado == 'normal'}"
+                >
+                    Normal
+                </option>
+
+                <option
+                        value="difficult"
+                        th:selected="${modoSeleccionado == 'difficult'}"
+                >
+                    Difícil — 8 intentos
+                </option>
+            </select>
+            <button
+                    type="submit"
+                    th:disabled="${!partidaGanada}"
+                    th:text="${partidaGanada}
+        ? 'Nueva partida'
+        : '🔒 Adivina para desbloquear'"
+            >
+                Nueva partida
+            </button>
+        </form>
+
+        <form
+                id="guess-form"
+                class="guess-form"
+                th:action="@{/pokedle}"
+                method="post"
+        >
+            <label for="pokemon-name">Escribe el nombre de un Pokémon</label>
+            <div class="guess-controls">
+                <div class="pokemon-search">
+                    <input
+                            id="pokemon-name"
+                            name="pokemonName"
+                            type="text"
+                            placeholder="Escribe un Pokémon..."
+                            autocomplete="off"
+                            required
+                            role="combobox"
+                            aria-autocomplete="list"
+                            aria-controls="pokemon-suggestions"
+                            aria-expanded="false"
+                            th:value="${respuestaAnterior}"
+                    >
+
+                    <div
+                            id="pokemon-suggestions"
+                            class="pokemon-suggestions"
+                            role="listbox"
+                    ></div>
+                </div>
+
+                <button type="submit">Adivinar</button>
+            </div>
+            <section
+                    id="unlockable-hints"
+                    class="unlockable-hints"
+            >
+                <h2>Pistas adicionales</h2>
+
+                <div class="hints-grid">
+
+                    <article
+                            id="generation-hint"
+                            class="hint-card hint-locked"
+                    >
+                        <div class="hint-lock">🔒</div>
+
+                        <div class="hint-content">
+                            <span>Generación</span>
+                            <strong id="generation-hint-value">?</strong>
+                        </div>
+
+                        <p id="generation-hint-requirement">
+                            Se desbloquea con 5 intentos
+                        </p>
+                    </article>
+
+                    <article
+                            id="silhouette-hint"
+                            class="hint-card hint-locked"
+                    >
+                        <div class="hint-lock">🔒</div>
+
+                        <div class="hint-content">
+                            <span>Silueta</span>
+
+                            <img
+                                    id="silhouette-hint-image"
+                                    src=""
+                                    alt="Silueta del Pokémon oculto"
+                            >
+                        </div>
+
+                        <p id="silhouette-hint-requirement">
+                            Se desbloquea con 10 intentos
+                        </p>
+                    </article>
+
+                </div>
+            </section>
+        </form>
+        <div
+                id="result-message"
+                class="result-message"
+                role="status"
+                aria-live="polite"
+                th:classappend="${mensaje == null}
+            ? ' is-hidden'
+            : (${acierto}
+                ? ' result-correct'
+                : ' result-wrong')"
+        >
+            <p th:text="${mensaje}"></p>
+        </div>
+        <section class="attempts-section">
+            <div class="attempts-heading">
+                <h2>Intentos</h2>
+
+                <div class="game-indicators">
+        <span
+                id="attempt-counter"
+                class="attempt-counter"
+                aria-label="Número de intentos"
+                aria-live="polite"
+                th:text="${#lists.size(intentos)}"
+        >
+            0
+        </span>
+                    <span
+                            id="remaining-attempts"
+                            class="remaining-attempts is-hidden"
+                    >
+    Quedan 8
+</span>
+
+                    <span id="game-timer" class="game-timer">
+            ⏱ 00:00
+        </span>
+                    <button
+                            id="sound-toggle"
+                            class="sound-toggle"
+                            type="button"
+                            aria-label="Silenciar sonidos"
+                            title="Activar o silenciar sonidos"
+                    >
+                        🔊
+                    </button>
+                </div>
+            </div>
+
+            <div
+                    id="attempts-empty"
+                    class="attempts-empty"
+                    th:classappend="${#lists.isEmpty(intentos)}
+            ? ''
+            : ' is-hidden'"
+            >
+                <span>🔍</span>
+                <p>Todavía no has realizado ningún intento.</p>
+            </div>
+            <div
+                    id="clues-wrapper"
+                    class="clues-wrapper"
+                    th:classappend="${#lists.isEmpty(intentos)}
+            ? ' is-hidden'
+            : ''"
+            >
+
+                <table class="clues-table">
+                    <thead>
+                    <tr>
+                        <th>Pokémon</th>
+                        <th>Tipo 1</th>
+                        <th>Tipo 2</th>
+                        <th>Hábitat</th>
+                        <th>Color</th>
+                        <th>Fase evolutiva</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="attempts-body">
+                    <tr th:each="intento : ${intentos}">
+                        <td
+                                class="pokemon-clue"
+                                th:classappend="${intento.id == pokemonOculto.id}
+                        ? ' clue-correct'
+                        : ' clue-wrong'"
+                        >
+                            <img
+                                    th:src="${intento.imagen}"
+                                    th:alt="${intento.nombre}"
+                            >
+                            <span th:text="${intento.nombre}"></span>
+                        </td>
+
+                        <td
+                                th:text="${intento.tipo1}"
+                                th:classappend="${intento.tipo1 == pokemonOculto.tipo1
+            ? ' clue-correct'
+            : (intento.tipo1 != 'Ninguno'
+                and intento.tipo1 == pokemonOculto.tipo2
+                ? ' clue-partial'
+                : ' clue-wrong')}"
+                        ></td>
+
+                        <td
+                                th:text="${intento.tipo2}"
+                                th:classappend="${intento.tipo2 == pokemonOculto.tipo2
+            ? ' clue-correct'
+            : (intento.tipo2 != 'Ninguno'
+                and intento.tipo2 == pokemonOculto.tipo1
+                ? ' clue-partial'
+                : ' clue-wrong')}"
+                        ></td>
+
+                        <td
+                                th:text="${intento.habitat}"
+                                th:classappend="${intento.habitat == pokemonOculto.habitat}
+                        ? ' clue-correct'
+                        : ' clue-wrong'"
+                        ></td>
+
+                        <td
+                                th:text="${intento.color}"
+                                th:classappend="${intento.color == pokemonOculto.color}
+                        ? ' clue-correct'
+                        : ' clue-wrong'"
+                        ></td>
+
+                        <td
+                                th:text="|Fase ${intento.faseEvolucion}|"
+                                th:classappend="${intento.faseEvolucion == pokemonOculto.faseEvolucion}
+                        ? ' clue-correct'
+                        : ' clue-wrong'"
+                        ></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </section>
+</main>
+<div
+        id="victory-modal"
+        class="victory-overlay is-hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="victory-title"
+>
+    <div class="victory-card">
+        <p id="victory-label" class="victory-label">
+            ¡Pokémon encontrado!
+        </p>
+
+        <h2 id="victory-title">¡Excelente trabajo!</h2>
+
+        <div class="victory-pokemon">
+            <div class="victory-glow"></div>
+
+            <img
+                    id="victory-image"
+                    src=""
+                    alt="Pokémon encontrado"
+            >
+        </div>
+
+        <h3 id="victory-name">Pokémon</h3>
+
+        <div class="victory-summary">
+            <div>
+                <span>Intentos</span>
+                <strong id="victory-attempts">0</strong>
+            </div>
+
+            <div>
+                <span>Tiempo</span>
+                <strong id="victory-time">00:00</strong>
+            </div>
+        </div>
+
+        <p id="victory-message" class="victory-message">
+            Has completado esta partida de Badobi Pokédle.
+        </p>
+
+        <div class="final-actions">
+            <button
+                    id="share-result"
+                    class="share-result-button"
+                    type="button"
+            >
+                Compartir resultado
+            </button>
+
+            <button
+                    id="close-victory"
+                    class="continue-button"
+                    type="button"
+            >
+                Continuar
+            </button>
+        </div>
+    </div>
+</div>
+<footer class="site-footer">
+    <p>
+        Badobi Pokégames — Creado por
+        <a
+                href="https://www.youtube.com/@Badobipkm"
+                target="_blank"
+                rel="noopener noreferrer"
+        >
+            Badobi
+        </a>
+    </p>
+
+    <p class="fan-disclaimer">
+        Proyecto fan no oficial, sin afiliación con Nintendo,
+        Game Freak, Creatures Inc. ni The Pokémon Company.
+    </p>
+
+    <p class="api-credit">
+        Datos e imágenes obtenidos mediante
+        <a
+                href="https://pokeapi.co/"
+                target="_blank"
+                rel="noopener noreferrer"
+        >
+            PokéAPI
+        </a>.
+    </p>
+</footer>
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/pokedle.js}"></script>
+</body>
+</html>
