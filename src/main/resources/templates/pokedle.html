@@ -129,12 +129,15 @@
             </select>
             <button
                     type="submit"
-                    th:disabled="${!partidaGanada}"
-                    th:text="${partidaGanada}
-        ? 'Nueva partida'
-        : '🔒 Adivina para desbloquear'"
+                    th:disabled="${!partidaGanada
+            and !#lists.isEmpty(intentos)}"
+                    th:text="${#lists.isEmpty(intentos)}
+            ? 'Comenzar partida'
+            : (${partidaGanada}
+                ? 'Nueva partida'
+                : '🔒 Partida en curso')"
             >
-                Nueva partida
+                Comenzar partida
             </button>
         </form>
 

@@ -378,6 +378,14 @@ guessForm.addEventListener("submit", async event => {
         actualizarIntentosRestantes(
             resultado.cantidadIntentos
         );
+        if (
+            !resultado.acierto
+            && !resultado.derrota
+            && newGameButton
+        ) {
+            newGameButton.disabled = true;
+            newGameButton.textContent = "🔒 Partida en curso";
+        }
         setTimeout(() => {
             actualizarPistasDesbloqueables(resultado);
         }, 1200);
