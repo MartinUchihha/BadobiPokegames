@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Badobi PokéFusion</title>
+
+    <link
+            rel="stylesheet"
+            th:href="@{/css/style.css}"
+    >
+</head>
+
+<body>
+
+<header class="main-header">
+
+    <a class="logo" th:href="@{/}">
+        Badobi <span>Pokégames</span>
+    </a>
+
+    <nav class="main-nav">
+        <a
+                class="active"
+                th:href="@{/}"
+        >
+            Juegos
+        </a>
+
+        <a th:href="@{/estadisticas}">
+            Estadísticas
+        </a>
+
+        <a th:href="@{/ranking}">
+            Ranking
+        </a>
+
+        <a th:href="@{/logros}">
+            Logros
+        </a>
+    </nav>
+
+    <button
+            id="theme-toggle"
+            class="theme-toggle"
+            type="button"
+            aria-label="Activar tema oscuro"
+            title="Cambiar tema"
+    >
+        🌙
+    </button>
+
+</header>
+
+<main class="fusion-page">
+
+    <section class="fusion-hero">
+        <p class="eyebrow">Fusión diaria</p>
+
+        <h1>Badobi PokéFusion</h1>
+
+        <p>
+            Descubre los cuatro Pokémon que forman
+            la fusión de hoy.
+        </p>
+    </section>
+
+    <section
+            id="fusion-game"
+            class="fusion-game"
+            th:attr="
+            data-fusion-date=${fusion.fecha},
+            data-next-change=${proximoCambio}
+        "
+    >
+
+        <div class="fusion-image-card">
+            <img
+                    class="fusion-image"
+                    th:src="@{/fusion/imagen}"
+                    alt="Fusión Pokémon del día"
+            >
+        </div>
+
+        <div class="fusion-progress">
+            <span>Pokémon descubiertos</span>
+
+            <strong>
+                <span id="fusion-correct-count">0</span>/4
+            </strong>
+        </div>
+        <div class="fusion-countdown">
+            <span>Nueva fusión en</span>
+
+            <strong id="fusion-countdown">
+                --:--:--
+            </strong>
+        </div>
+        <div
+                id="fusion-slots"
+                class="fusion-slots"
+                aria-live="polite"
+        >
+            <div class="fusion-slot">???</div>
+            <div class="fusion-slot">???</div>
+            <div class="fusion-slot">???</div>
+            <div class="fusion-slot">???</div>
+        </div>
+
+        <form id="fusion-form" class="fusion-form">
+            <label for="fusion-pokemon">
+                Escribe uno de los Pokémon de la fusión
+            </label>
+
+            <div class="fusion-controls">
+
+                <div class="pokemon-search">
+                    <input
+                            id="fusion-pokemon"
+                            name="pokemonName"
+                            type="text"
+                            placeholder="Escribe un Pokémon..."
+                            autocomplete="off"
+                            aria-autocomplete="list"
+                            aria-controls="fusion-suggestions"
+                            aria-expanded="false"
+                            required
+                    >
+
+                    <div
+                            id="fusion-suggestions"
+                            class="pokemon-suggestions"
+                            role="listbox"
+                    ></div>
+                </div>
+
+                <button type="submit">
+                    Probar
+                </button>
+
+            </div>
+
+            <p
+                    id="fusion-message"
+                    class="fusion-message"
+                    aria-live="polite"
+            ></p>
+        </form><section class="fusion-attempts">
+
+        <div class="fusion-attempts-heading">
+            <h2>Intentos</h2>
+
+            <span class="fusion-attempt-counter">
+            <span id="fusion-attempt-count">0</span>
+            intentos
+        </span>
+        </div>
+
+        <div
+                id="fusion-attempt-list"
+                class="fusion-attempt-list"
+                aria-live="polite"
+        >
+            <p
+                    id="fusion-no-attempts"
+                    class="fusion-no-attempts"
+            >
+                Todavía no has probado ningún Pokémon.
+            </p>
+        </div>
+
+    </section>
+
+    </section>
+
+</main>
+<div
+        id="fusion-victory-modal"
+        class="fusion-victory-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="fusion-victory-title"
+        hidden
+>
+    <div class="fusion-victory-card">
+
+        <span class="fusion-victory-emoji">
+            ✨
+        </span>
+
+        <p class="eyebrow">
+            Fusión completada
+        </p>
+
+        <h2 id="fusion-victory-title">
+            ¡Descubriste la PokéFusion!
+        </h2>
+
+        <img
+                class="fusion-victory-image"
+                th:src="@{/fusion/imagen}"
+                alt="PokéFusion completada"
+        >
+
+        <p>
+            Encontraste los cuatro Pokémon en
+            <strong id="fusion-victory-attempts">0</strong>
+            intentos.
+        </p>
+
+        <button
+                id="fusion-victory-close"
+                type="button"
+        >
+            Continuar
+        </button>
+
+    </div>
+</div>
+<footer>
+    <p>
+        Badobi Pokégames — Proyecto creado para fans de Pokémon
+    </p>
+    <p>
+        Pokémon y sus nombres pertenecen a sus respectivos propietarios.
+    </p>
+</footer>
+
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/fusion.js}"></script>
+
+</body>
+</html>
