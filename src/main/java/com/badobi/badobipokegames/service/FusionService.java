@@ -52,7 +52,7 @@ public class FusionService {
                     LocalDate.of(2026, 8, 23),
                     "fusions/fusion-004.png",
                     List.of(
-                            "Porygon-Z",
+                            "Porygon",
                             "Espurr",
                             "Noivern",
                             "Girafarig"
