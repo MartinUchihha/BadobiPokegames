@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+          name="description"
+          content="Adivina Pokémon por su silueta en modo clásico o contrarreloj."
+  >
+
+  <title>PokéSilueta | Badobi Pokégames</title>
+
+  <link
+          rel="stylesheet"
+          th:href="@{/css/style.css}"
+  >
+</head>
+
+<body>
+
+<header class="main-header">
+
+  <a class="logo" th:href="@{/}">
+    Badobi <span>Pokégames</span>
+  </a>
+
+  <nav class="main-nav">
+    <a class="active" th:href="@{/}">
+      Juegos
+    </a>
+    <a th:href="@{/estadisticas}">
+      Estadísticas
+    </a>
+    <a th:href="@{/ranking}">
+      Ranking
+    </a>
+    <a th:href="@{/logros}">
+      Logros
+    </a>
+  </nav>
+
+  <button
+          id="theme-toggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Activar tema oscuro"
+          title="Cambiar tema"
+  >
+    🌙
+  </button>
+
+</header>
+
+<main class="silhouette-page">
+
+  <section class="silhouette-hero">
+    <p class="eyebrow">
+      ¿Quién es ese Pokémon?
+    </p>
+
+    <h1>PokéSilueta</h1>
+
+    <p>
+      Observa la forma y descubre qué Pokémon
+      se esconde detrás de la silueta.
+    </p>
+  </section>
+
+  <section
+          id="silhouette-setup"
+          class="silhouette-setup"
+  >
+    <h2>Prepara la partida</h2>
+
+    <label for="silhouette-mode">
+      Modo de juego
+    </label>
+
+    <select id="silhouette-mode">
+      <option value="classic">
+        Clásico — 6 intentos
+      </option>
+
+      <option value="time">
+        Contrarreloj — 60 segundos
+      </option>
+    </select>
+
+    <label for="silhouette-generation">
+      Generación
+    </label>
+
+    <select id="silhouette-generation">
+      <option value="all">Todas</option>
+      <option value="1">Generación I</option>
+      <option value="2">Generación II</option>
+      <option value="3">Generación III</option>
+      <option value="4">Generación IV</option>
+      <option value="5">Generación V</option>
+      <option value="6">Generación VI</option>
+      <option value="7">Generación VII</option>
+      <option value="8">Generación VIII</option>
+      <option value="9">Generación IX</option>
+    </select>
+
+    <button
+            id="silhouette-start"
+            type="button"
+    >
+      Empezar partida
+    </button>
+  </section>
+
+  <section
+          id="silhouette-game"
+          class="silhouette-game"
+          hidden
+  >
+    <div class="silhouette-game-tools">
+      <button
+              id="silhouette-sound-toggle"
+              class="silhouette-sound-toggle"
+              type="button"
+              aria-label="Silenciar sonidos"
+              title="Activar o silenciar sonidos"
+      >
+        🔊
+      </button>
+    </div>
+    <div
+            id="silhouette-classic-status"
+            class="silhouette-status"
+    >
+            <span>
+                Intento
+                <strong id="silhouette-attempt">1</strong>/6
+            </span>
+
+      <span>
+                Modo clásico
+            </span>
+    </div>
+
+    <div
+            id="silhouette-time-status"
+            class="silhouette-status"
+            hidden
+    >
+            <span>
+                ⏱️
+                <strong id="silhouette-timer">60.0</strong>s
+            </span>
+
+      <span>
+                Puntos:
+                <strong id="silhouette-score">0</strong>
+            </span>
+
+      <span>
+                Mejor racha:
+                <strong id="silhouette-streak">0</strong>
+            </span>
+    </div>
+
+    <div class="silhouette-image-window">
+
+      <img
+              id="silhouette-image"
+              class="silhouette-image"
+              src=""
+              alt="Silueta del Pokémon misterioso"
+              draggable="false"
+              hidden
+      >
+
+      <div
+              id="silhouette-loading"
+              class="silhouette-loading"
+      >
+        Preparando silueta...
+      </div>
+
+    </div>
+
+    <form
+            id="silhouette-form"
+            class="silhouette-form"
+    >
+      <label for="silhouette-answer">
+        Escribe el nombre del Pokémon
+      </label>
+
+      <div class="silhouette-controls">
+
+        <div class="pokemon-search">
+          <input
+                  id="silhouette-answer"
+                  name="pokemonName"
+                  type="text"
+                  placeholder="Escribe un Pokémon..."
+                  autocomplete="off"
+                  aria-autocomplete="list"
+                  aria-controls="silhouette-suggestions"
+                  aria-expanded="false"
+                  required
+          >
+
+          <div
+                  id="silhouette-suggestions"
+                  class="pokemon-suggestions"
+                  role="listbox"
+          ></div>
+        </div>
+
+        <button type="submit">
+          Adivinar
+        </button>
+
+        <button
+                id="silhouette-skip"
+                class="silhouette-skip"
+                type="button"
+                hidden
+        >
+          Saltar (-5 s)
+        </button>
+
+      </div>
+
+      <p
+              id="silhouette-message"
+              class="silhouette-message"
+              aria-live="polite"
+      ></p>
+    </form>
+
+    <section
+            id="silhouette-attempts-section"
+            class="silhouette-attempts"
+    >
+      <h2>Intentos anteriores</h2>
+
+      <div
+              id="silhouette-attempt-list"
+              class="silhouette-attempt-list"
+      >
+        <p class="silhouette-no-attempts">
+          Todavía no has realizado ningún intento.
+        </p>
+      </div>
+    </section>
+
+    <button
+            id="silhouette-new-game"
+            class="silhouette-new-game"
+            type="button"
+            hidden
+    >
+      Jugar otra partida
+    </button>
+
+  </section>
+
+</main>
+
+<div
+        id="silhouette-result-modal"
+        class="silhouette-result-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="silhouette-result-title"
+        hidden
+>
+  <div class="silhouette-result-card">
+
+        <span
+                id="silhouette-result-icon"
+                class="silhouette-result-icon"
+        >
+            ✨
+        </span>
+
+    <h2 id="silhouette-result-title">
+      Resultado
+    </h2>
+
+    <img
+            id="silhouette-result-image"
+            class="silhouette-result-image"
+            src=""
+            alt="Pokémon revelado"
+            draggable="false"
+    >
+
+    <p id="silhouette-result-text"></p>
+
+    <button
+            id="silhouette-result-close"
+            type="button"
+    >
+      Continuar
+    </button>
+
+  </div>
+</div>
+
+<footer>
+  <p>
+    Badobi Pokégames — Proyecto creado para fans de Pokémon
+  </p>
+
+  <p>
+    Pokémon y sus nombres pertenecen a sus respectivos propietarios.
+  </p>
+</footer>
+
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/silueta.js}"></script>
+
+</body>
+</html>
