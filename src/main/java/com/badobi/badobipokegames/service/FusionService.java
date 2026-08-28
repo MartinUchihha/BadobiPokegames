@@ -90,6 +90,82 @@ public class FusionService {
                             "Sigilyph",
                             "Grafaiai"
                     )
+            ),
+            new FusionDiaria(
+                    LocalDate.of(2026, 8, 27),
+                    "fusions/fusion-008.png",
+                    List.of(
+                            "Torterra",
+                            "Arcanine",
+                            "Flygon",
+                            "Toxicroak"
+                    )
+            ),
+
+            new FusionDiaria(
+                    LocalDate.of(2026, 8, 28),
+                    "fusions/fusion-009.png",
+                    List.of(
+                            "Wailord",
+                            "Krookodile",
+                            "Chandelure",
+                            "Tsareena"
+                    )
+            ),
+
+            new FusionDiaria(
+                    LocalDate.of(2026, 8, 29),
+                    "fusions/fusion-010.png",
+                    List.of(
+                            "Reuniclus",
+                            "Dusknoir",
+                            "Clawitzer",
+                            "Jumpluff"
+                    )
+            ),
+
+            new FusionDiaria(
+                    LocalDate.of(2026, 8, 30),
+                    "fusions/fusion-011.png",
+                    List.of(
+                            "Falinks",
+                            "Malamar",
+                            "Skarmory",
+                            "Bellossom"
+                    )
+            ),
+
+            new FusionDiaria(
+                    LocalDate.of(2026, 8, 31),
+                    "fusions/fusion-012.png",
+                    List.of(
+                            "Orthworm",
+                            "Banette",
+                            "Masquerain",
+                            "Cacturne"
+                    )
+            ),
+
+            new FusionDiaria(
+                    LocalDate.of(2026, 9, 1),
+                    "fusions/fusion-013.png",
+                    List.of(
+                            "Araquanid",
+                            "Runerigus",
+                            "Bruxish",
+                            "Pawniard"
+                    )
+            ),
+
+            new FusionDiaria(
+                    LocalDate.of(2026, 9, 2),
+                    "fusions/fusion-014.png",
+                    List.of(
+                            "Dragalge",
+                            "Cofagrigus",
+                            "Frosmoth",
+                            "Ambipom"
+                    )
             )
     );
 
