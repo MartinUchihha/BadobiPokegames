@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéPrice | ¿Qué carta Pokémon vale más?</title>
+    <meta name="description" content="Compara cartas Pokémon TCG, descubre cuál tiene mayor precio de mercado y consigue la mejor racha en PokéPrice.">
+    <link rel="canonical" href="https://badobipokegames.onrender.com/pokeprice">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/pokeprice.css}">
+    <link rel="stylesheet" th:href="@{/css/pokeprice-modes.css}">
+</head>
+<body>
+<header class="main-header">
+    <a class="logo" th:href="@{/}">Badobi <span>Pokégames</span></a>
+    <nav class="main-nav">
+        <a th:href="@{/}">Juegos</a>
+        <a th:href="@{/estadisticas}">Estadísticas</a>
+        <a th:href="@{/ranking}">Ranking</a>
+        <a th:href="@{/logros}">Logros</a>
+    </nav>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Activar tema oscuro">🌙</button>
+</header>
+
+<main class="price-page">
+    <section class="price-hero">
+        <span class="price-eyebrow">EL MERCADO POKÉMON TCG</span>
+        <h1>PokéPrice</h1>
+        <p>Observa dos cartas exactas y decide si la segunda vale más o menos. Cada acierto aumenta tu racha.</p>
+    </section>
+
+    <section id="price-setup" class="price-panel price-setup">
+        <div>
+            <small>MODO CLÁSICO</small>
+            <h2>¿Conoces el valor de las cartas?</h2>
+            <p>Comparamos el precio de mercado de la edición y acabado indicados en cada carta.</p>
+        </div>
+        <div class="price-mode-control">
+            <label for="price-mode">Tipo de cartas</label>
+            <select id="price-mode">
+                <option value="locura">🔥 Cartas Locura</option>
+                <option value="todas">🃏 Todas las cartas</option>
+            </select>
+            <small>Cartas Locura: sin comunes y con valor desde US$10.</small>
+        </div>
+        <button id="price-start" class="price-main-button" type="button">Comenzar partida</button>
+        <p id="price-setup-message" class="price-setup-message" aria-live="polite"></p>
+    </section>
+
+    <section id="price-game" class="price-game" hidden>
+        <div class="price-scorebar">
+            <div><small>RACHA</small><strong id="price-score">0</strong></div>
+            <div class="price-source">Precios de mercado · USD</div>
+            <div><small>RÉCORD</small><strong id="price-best">0</strong></div>
+        </div>
+
+        <div class="price-arena">
+            <article id="price-left-card" class="tcg-card-panel">
+                <span class="tcg-side-label">CARTA CONOCIDA</span>
+                <div class="tcg-image-frame">
+                    <img id="price-left-image" src="" alt="" draggable="false">
+                </div>
+                <h2 id="price-left-name"></h2>
+                <p id="price-left-set" class="tcg-set"></p>
+                <div id="price-left-finish" class="tcg-finish"></div>
+                <div id="price-left-value" class="tcg-price"></div>
+            </article>
+
+            <div class="price-versus">VS</div>
+
+            <article id="price-right-card" class="tcg-card-panel">
+                <span class="tcg-side-label">¿VALE MÁS O MENOS?</span>
+                <div class="tcg-image-frame">
+                    <img id="price-right-image" src="" alt="" draggable="false">
+                </div>
+                <h2 id="price-right-name"></h2>
+                <p id="price-right-set" class="tcg-set"></p>
+                <div id="price-right-finish" class="tcg-finish"></div>
+                <div id="price-right-value" class="tcg-price hidden-price">US$ ???</div>
+            </article>
+        </div>
+
+        <section class="price-panel price-actions">
+            <p id="price-question">¿La carta de la derecha vale más o menos?</p>
+            <div class="price-choice-buttons">
+                <button id="price-higher" class="price-choice higher" type="button"><span>↑</span> Vale más</button>
+                <button id="price-lower" class="price-choice lower" type="button"><span>↓</span> Vale menos</button>
+            </div>
+            <p id="price-message" class="price-message" aria-live="polite"></p>
+        </section>
+    </section>
+
+    <section class="price-note">
+        <strong>Precio y carta exactos</strong>
+        <p>La imagen, colección, número y acabado corresponden al precio mostrado. Los valores pueden cambiar con el mercado.</p>
+    </section>
+</main>
+
+<div id="price-result" class="price-result" hidden>
+    <div class="price-result-card" role="dialog" aria-modal="true" aria-labelledby="price-result-title">
+        <span id="price-result-icon">📉</span>
+        <p id="price-result-rank" class="price-result-rank"></p>
+        <h2 id="price-result-title">Fin de la partida</h2>
+        <p id="price-result-text"></p>
+        <div class="price-final-score"><span>Racha conseguida</span><strong id="price-final-score">0</strong></div>
+        <button id="price-restart" class="price-main-button" type="button">Jugar otra vez</button>
+        <a th:href="@{/}">Volver a los juegos</a>
+    </div>
+</div>
+
+<footer><p>Badobi Pokégames — Proyecto creado para fans de Pokémon</p></footer>
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/pokeprice.js}"></script>
+</body>
+</html>

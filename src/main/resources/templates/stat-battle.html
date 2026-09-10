@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stat Battle | Badobi Pokégames</title>
+    <meta name="description" content="Enfrenta Pokémon, elige su mejor estadística y conviértete en Campeón de Stat Battle.">
+    <link rel="canonical" href="https://badobipokegames.onrender.com/stat-battle">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/stat-battle.css}">
+</head>
+<body>
+<header class="main-header">
+    <a class="logo" th:href="@{/}">Badobi <span>Pokégames</span></a>
+    <nav class="main-nav">
+        <a th:href="@{/}">Juegos</a><a th:href="@{/estadisticas}">Estadísticas</a>
+        <a th:href="@{/ranking}">Ranking</a><a th:href="@{/logros}">Logros</a>
+    </nav>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Activar tema oscuro">🌙</button>
+</header>
+
+<main class="battle-page">
+    <section class="battle-hero">
+        <span>Combate de estadísticas</span>
+        <h1>Stat Battle</h1>
+        <p>Estudia al rival, elige la mejor estadística de tu Pokémon y sé el primero en conseguir cuatro victorias.</p>
+    </section>
+
+    <section id="battle-setup" class="battle-panel battle-setup">
+        <div><small>PREPARA EL COMBATE</small><h2>Elige una generación</h2><p>Ambos Pokémon pertenecerán a la generación seleccionada.</p></div>
+        <select id="battle-generation" aria-label="Generación">
+            <option value="all">Todas las generaciones</option>
+            <option value="1">Generación I</option><option value="2">Generación II</option>
+            <option value="3">Generación III</option><option value="4">Generación IV</option>
+            <option value="5">Generación V</option><option value="6">Generación VI</option>
+            <option value="7">Generación VII</option><option value="8">Generación VIII</option>
+            <option value="9">Generación IX</option>
+        </select>
+        <button id="battle-start" class="battle-button" type="button">Comenzar combate</button>
+    </section>
+
+    <section id="battle-game" class="battle-game" hidden>
+        <div class="battle-scoreboard">
+            <div><small>TÚ</small><strong id="player-score">0</strong></div>
+            <span id="battle-round">Ronda 1</span>
+            <div><small>RIVAL</small><strong id="rival-score">0</strong></div>
+        </div>
+
+        <div class="battle-arena">
+            <article id="player-card" class="fighter-card player-card">
+                <span class="fighter-label">TU POKÉMON</span>
+                <img id="player-image" src="" alt="" draggable="false">
+                <h2 id="player-name"></h2>
+                <div id="player-stats" class="battle-stats"></div>
+            </article>
+
+            <div class="battle-versus">VS</div>
+
+            <article id="rival-card" class="fighter-card rival-card">
+                <span class="fighter-label">POKÉMON RIVAL</span>
+                <img id="rival-image" src="" alt="" draggable="false">
+                <h2 id="rival-name"></h2>
+                <div id="rival-stats" class="battle-stats hidden-stats">Elige una estadística para revelar sus valores</div>
+            </article>
+        </div>
+
+        <section class="battle-panel choice-panel">
+            <h2 id="choice-title">Elige una estadística</h2>
+            <p id="battle-message" aria-live="polite">Selecciona la mayor ventaja de tu Pokémon.</p>
+            <div id="stat-choices" class="stat-choices"></div>
+            <button id="next-round" class="battle-button" type="button" hidden>Siguiente ronda</button>
+        </section>
+    </section>
+</main>
+
+<div id="battle-result" class="battle-result" hidden>
+    <div class="battle-result-card" role="dialog" aria-modal="true">
+        <span id="battle-result-icon">🏆</span><p id="battle-rank"></p>
+        <h2 id="battle-result-title"></h2><p id="battle-result-text"></p>
+        <button id="battle-play-again" class="battle-button" type="button">Jugar otra vez</button>
+        <a th:href="@{/}">Volver a los juegos</a>
+    </div>
+</div>
+
+<footer><p>Badobi Pokégames — Proyecto creado para fans de Pokémon</p></footer>
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/stat-battle.js}"></script>
+</body>
+</html>
