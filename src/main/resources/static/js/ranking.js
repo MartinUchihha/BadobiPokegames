@@ -1,179 +1,138 @@
-const RANKING_STORAGE_KEY =
-    "badobiPokedlePersonalRanking";
+document.addEventListener("DOMContentLoaded", () => {
+    const profileCreate = document.getElementById("profile-create");
+    const profileReady = document.getElementById("profile-ready");
+    const profileForm = document.getElementById("profile-form");
+    const profileName = document.getElementById("profile-name");
+    const profileMessage = document.getElementById("profile-message");
+    const playerName = document.getElementById("profile-player-name");
+    const playerAvatar = document.getElementById("profile-avatar");
+    const gameSelect = document.getElementById("global-ranking-game");
+    const body = document.getElementById("global-ranking-body");
+    const wrapper = document.getElementById("global-ranking-wrapper");
+    const status = document.getElementById("ranking-status");
+    const scoreHeading = document.getElementById("score-heading");
+    let currentName = "";
 
-const rankingGeneration = document.querySelector(
-    "#ranking-generation"
-);
+    profileForm.addEventListener("submit", createProfile);
+    gameSelect.addEventListener("change", loadRanking);
+    loadProfile();
+    loadRanking();
 
-const rankingMode = document.querySelector("#ranking-mode");
-const rankingBody = document.querySelector("#ranking-body");
-const rankingEmpty = document.querySelector("#ranking-empty");
-
-const rankingTableWrapper = document.querySelector(
-    "#ranking-table-wrapper"
-);
-
-const clearRankingButton = document.querySelector(
-    "#clear-ranking"
-);
-
-function obtenerRanking() {
-    const savedRanking = localStorage.getItem(
-        RANKING_STORAGE_KEY
-    );
-
-    if (!savedRanking) {
-        return [];
+    async function loadProfile() {
+        try {
+            const response = await fetch("/api/ranking/perfil");
+            const profile = await response.json();
+            if (profile.registrado) showProfile(profile);
+        } catch (error) {
+            profileMessage.textContent = "No se pudo comprobar tu perfil.";
+        }
     }
 
-    try {
-        return JSON.parse(savedRanking);
-    } catch (error) {
-        console.error(
-            "No se pudo leer el ranking",
-            error
-        );
-
-        return [];
-    }
-}
-
-function mostrarRanking() {
-    const ranking = obtenerRanking();
-
-    const selectedGeneration = rankingGeneration.value;
-    const selectedMode = rankingMode.value;
-
-    const filteredRanking = ranking.filter(game => {
-        const generationMatches =
-            selectedGeneration === "all"
-            || game.generation === selectedGeneration;
-
-        const modeMatches =
-            selectedMode === "all"
-            || game.mode === selectedMode;
-
-        return generationMatches && modeMatches;
-    });
-
-    rankingBody.innerHTML = "";
-
-    if (filteredRanking.length === 0) {
-        rankingEmpty.classList.remove("is-hidden");
-        rankingTableWrapper.classList.add("is-hidden");
-        return;
+    async function createProfile(event) {
+        event.preventDefault();
+        const button = profileForm.querySelector("button");
+        button.disabled = true;
+        button.textContent = "Creando...";
+        profileMessage.textContent = "";
+        try {
+            const response = await fetch("/api/ranking/perfil", {
+                method: "POST",
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: new URLSearchParams({nombre: profileName.value})
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || "No se pudo crear el perfil");
+            showProfile(data);
+            await loadRanking();
+        } catch (error) {
+            profileMessage.textContent = error.message;
+        } finally {
+            button.disabled = false;
+            button.textContent = "Crear entrenador";
+        }
     }
 
-    rankingEmpty.classList.add("is-hidden");
-    rankingTableWrapper.classList.remove("is-hidden");
-
-    filteredRanking.forEach((game, index) => {
-        const row = document.createElement("tr");
-
-        row.appendChild(
-            crearCeldaPosicion(index + 1)
-        );
-
-        row.appendChild(
-            crearCelda(game.generation)
-        );
-
-        row.appendChild(
-            crearCeldaModo(game.mode)
-        );
-
-        row.appendChild(
-            crearCelda(String(game.attempts))
-        );
-
-        row.appendChild(
-            crearCelda(formatearTiempo(game.seconds))
-        );
-
-        row.appendChild(
-            crearCelda(formatearFecha(game.date))
-        );
-
-        rankingBody.appendChild(row);
-    });
-}
-
-function crearCelda(text) {
-    const cell = document.createElement("td");
-    cell.textContent = text;
-    return cell;
-}
-
-function crearCeldaPosicion(position) {
-    const cell = document.createElement("td");
-    cell.className = "ranking-position";
-
-    const medals = {
-        1: "🥇",
-        2: "🥈",
-        3: "🥉"
-    };
-
-    cell.textContent = medals[position] || `#${position}`;
-
-    return cell;
-}
-
-function crearCeldaModo(mode) {
-    const cell = document.createElement("td");
-    const badge = document.createElement("span");
-
-    badge.textContent = mode;
-    badge.className =
-        mode === "Difícil"
-            ? "mode-badge difficult"
-            : "mode-badge normal";
-
-    cell.appendChild(badge);
-    return cell;
-}
-
-function formatearTiempo(totalSeconds) {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-
-    return [
-        String(minutes).padStart(2, "0"),
-        String(seconds).padStart(2, "0")
-    ].join(":");
-}
-
-function formatearFecha(date) {
-    const parsedDate = new Date(date);
-
-    return new Intl.DateTimeFormat("es", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric"
-    }).format(parsedDate);
-}
-
-rankingGeneration.addEventListener(
-    "change",
-    mostrarRanking
-);
-
-rankingMode.addEventListener(
-    "change",
-    mostrarRanking
-);
-
-clearRankingButton.addEventListener("click", () => {
-    const confirmation = window.confirm(
-        "¿Seguro que quieres borrar tu ranking personal?"
-    );
-
-    if (!confirmation) {
-        return;
+    function showProfile(profile) {
+        currentName = profile.nombre;
+        playerName.textContent = profile.nombre;
+        playerAvatar.textContent = profile.avatar;
+        profileCreate.hidden = true;
+        profileReady.hidden = false;
     }
 
-    localStorage.removeItem(RANKING_STORAGE_KEY);
-    mostrarRanking();
+    async function loadRanking() {
+        status.hidden = false;
+        status.textContent = "Cargando clasificación...";
+        wrapper.hidden = true;
+        try {
+            const response = await fetch(`/api/ranking/global?juego=${encodeURIComponent(gameSelect.value)}`);
+            if (!response.ok) throw new Error();
+            const data = await response.json();
+            document.getElementById("season-name").textContent = capitalize(data.temporada.nombre);
+            document.getElementById("season-end").textContent = `Finaliza el ${formatDate(data.temporada.termina)}`;
+            renderRows(data.ranking);
+        } catch (error) {
+            status.textContent = "No se pudo cargar el ranking. Inténtalo nuevamente.";
+        }
+    }
+
+    function renderRows(rows) {
+        body.innerHTML = "";
+        const headings = {
+            general: "Experiencia",
+            pokedle: "Eficiencia",
+            fusion: "Completado",
+            silueta: "Eficiencia",
+            "silueta-tiempo": "Aciertos",
+            pokeprice: "Mejor racha",
+            "higher-lower": "Mejor racha",
+            "stat-battle": "Puntuación",
+            trivia: "Puntuación",
+            pokezoom: "Eficiencia",
+            sonidos: "Eficiencia",
+            movimientos: "Eficiencia",
+            "adivina-estadisticas": "Eficiencia"
+        };
+        scoreHeading.textContent = headings[gameSelect.value] || "Puntuación";
+        if (rows.length === 0) {
+            status.hidden = false;
+            status.textContent = "Todavía no hay resultados. ¡Puedes ser el primer entrenador!";
+            wrapper.hidden = true;
+            return;
+        }
+
+        rows.forEach((entry, index) => {
+            const row = document.createElement("tr");
+            if (entry.nombre === currentName) row.classList.add("current-player");
+            row.append(cell(position(index + 1), "ranking-place"));
+            const trainer = document.createElement("td");
+            const avatar = document.createElement("span");
+            avatar.className = "table-avatar";
+            avatar.textContent = entry.avatar;
+            const name = document.createElement("strong");
+            name.textContent = entry.nombre;
+            trainer.append(avatar, name);
+            row.appendChild(trainer);
+            row.append(cell(formatNumber(entry.puntuacion), "ranking-score"));
+            row.append(cell(`${formatNumber(entry.experiencia)} XP`, "ranking-xp"));
+            body.appendChild(row);
+        });
+        status.hidden = true;
+        wrapper.hidden = false;
+    }
+
+    function cell(text, className) {
+        const element = document.createElement("td");
+        element.textContent = text;
+        element.className = className;
+        return element;
+    }
+
+    function position(value) { return ({1: "🥇", 2: "🥈", 3: "🥉"})[value] || `#${value}`; }
+    function formatNumber(value) { return new Intl.NumberFormat("es-CL").format(value); }
+    function formatDate(value) {
+        return new Intl.DateTimeFormat("es-CL", {day: "numeric", month: "long", year: "numeric"})
+            .format(new Date(`${value}T12:00:00`));
+    }
+    function capitalize(value) { return value.charAt(0).toUpperCase() + value.slice(1); }
 });
-
-mostrarRanking();

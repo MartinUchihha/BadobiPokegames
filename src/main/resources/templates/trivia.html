@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Trivia Pokémon | Badobi Pokégames</title>
+
+  <meta
+          name="description"
+          content="Pon a prueba tus conocimientos con preguntas Pokémon automáticas sobre tipos, generaciones y estadísticas."
+  >
+
+  <link
+          rel="canonical"
+          href="https://badobipokegames.onrender.com/trivia"
+  >
+
+  <link
+          rel="stylesheet"
+          th:href="@{/css/style.css}"
+  >
+</head>
+
+<body>
+<header class="main-header">
+  <a class="logo" th:href="@{/}">
+    Badobi <span>Pokégames</span>
+  </a>
+
+  <nav class="main-nav">
+    <a class="active" th:href="@{/}">Juegos</a>
+    <a th:href="@{/estadisticas}">Estadísticas</a>
+    <a th:href="@{/ranking}">Ranking</a>
+    <a th:href="@{/logros}">Logros</a>
+  </nav>
+
+  <button
+          id="theme-toggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Activar tema oscuro"
+          title="Cambiar tema"
+  >
+    🌙
+  </button>
+</header>
+
+<main class="trivia-page">
+  <section class="trivia-hero">
+        <span class="trivia-eyebrow">
+            ❓ Desafío de conocimiento
+        </span>
+
+    <h1>Trivia Pokémon</h1>
+
+    <p>
+      Responde diez preguntas generadas automáticamente
+      y demuestra que eres un verdadero Maestro Pokémon.
+    </p>
+  </section>
+
+  <section
+          id="trivia-setup"
+          class="trivia-setup"
+  >
+    <div class="trivia-setup-card">
+      <div class="trivia-setup-icon">🧠</div>
+
+      <h2>Prepara el desafío</h2>
+
+      <p>
+        Las preguntas aumentarán de dificultad
+        mientras avanzas.
+      </p>
+
+      <label for="trivia-generation">
+        Elige una generación
+      </label>
+
+      <select id="trivia-generation">
+        <option value="all">Todas las generaciones</option>
+        <option value="1">Generación I</option>
+        <option value="2">Generación II</option>
+        <option value="3">Generación III</option>
+        <option value="4">Generación IV</option>
+        <option value="5">Generación V</option>
+        <option value="6">Generación VI</option>
+        <option value="7">Generación VII</option>
+        <option value="8">Generación VIII</option>
+        <option value="9">Generación IX</option>
+      </select>
+
+      <button
+              id="trivia-start"
+              class="trivia-start"
+              type="button"
+      >
+        Comenzar trivia
+      </button>
+    </div>
+  </section>
+
+  <section
+          id="trivia-game"
+          class="trivia-game"
+          hidden
+  >
+    <div class="trivia-status">
+      <div class="trivia-status-item">
+        <span>Pregunta</span>
+        <strong id="trivia-question-number">1/10</strong>
+      </div>
+
+      <div class="trivia-status-item">
+        <span>Puntuación</span>
+        <strong id="trivia-score">0</strong>
+      </div>
+
+      <div class="trivia-status-item">
+        <span>Racha</span>
+        <strong id="trivia-streak">0 🔥</strong>
+      </div>
+
+      <button
+              id="trivia-sound-toggle"
+              class="trivia-sound-toggle"
+              type="button"
+              aria-label="Silenciar sonidos"
+              title="Activar o silenciar sonidos"
+      >
+        🔊
+      </button>
+    </div>
+
+    <div class="trivia-progress-track">
+      <div
+              id="trivia-progress-bar"
+              class="trivia-progress-bar"
+      ></div>
+    </div>
+
+    <article
+            id="trivia-question-card"
+            class="trivia-question-card"
+    >
+            <span
+                    id="trivia-category"
+                    class="trivia-category"
+            >
+                Tipos
+            </span>
+
+      <h2 id="trivia-question">
+        Preparando pregunta...
+      </h2>
+
+      <div
+              id="trivia-options"
+              class="trivia-options"
+      ></div>
+    </article>
+
+    <div class="trivia-helps">
+      <span>Ayudas disponibles:</span>
+
+      <button
+              id="trivia-fifty"
+              class="trivia-help-button"
+              type="button"
+              disabled
+      >
+        ✂️ 50/50
+      </button>
+
+      <button
+              id="trivia-change"
+              class="trivia-help-button"
+              type="button"
+              disabled
+      >
+        🔄 Cambiar pregunta
+      </button>
+    </div>
+
+    <section
+            id="trivia-feedback"
+            class="trivia-feedback"
+            hidden
+    >
+      <div
+              id="trivia-feedback-icon"
+              class="trivia-feedback-icon"
+      >
+        ✅
+      </div>
+
+      <div>
+        <h3 id="trivia-feedback-title">
+          ¡Correcto!
+        </h3>
+
+        <p id="trivia-explanation"></p>
+
+        <strong id="trivia-points-earned">
+          +100 puntos
+        </strong>
+      </div>
+
+      <button
+              id="trivia-next"
+              type="button"
+      >
+        Siguiente pregunta
+      </button>
+    </section>
+  </section>
+</main>
+
+<div
+        id="trivia-result-modal"
+        class="trivia-result-modal"
+        hidden
+>
+  <div
+          class="trivia-result-card"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="trivia-result-title"
+  >
+    <div
+            id="trivia-result-icon"
+            class="trivia-result-icon"
+    >
+      🏆
+    </div>
+
+    <h2 id="trivia-result-title">
+      Trivia completada
+    </h2>
+
+    <p id="trivia-result-rank">
+      Entrenador Pokémon
+    </p>
+
+    <div class="trivia-final-stats">
+      <div>
+        <span>Puntuación</span>
+        <strong id="trivia-final-score">0</strong>
+      </div>
+
+      <div>
+        <span>Mejor racha</span>
+        <strong id="trivia-final-streak">0</strong>
+      </div>
+    </div>
+
+    <p id="trivia-record-message"></p>
+
+    <button
+            id="trivia-restart"
+            type="button"
+    >
+      Jugar otra vez
+    </button>
+
+    <a th:href="@{/}">
+      Volver a los juegos
+    </a>
+  </div>
+</div>
+
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/trivia.js}"></script>
+</body>
+</html>

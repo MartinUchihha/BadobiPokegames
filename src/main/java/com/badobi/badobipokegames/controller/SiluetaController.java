@@ -3,12 +3,15 @@ package com.badobi.badobipokegames.controller;
 import com.badobi.badobipokegames.model.PartidaSilueta;
 import com.badobi.badobipokegames.model.RondaSiluetaTiempo;
 import com.badobi.badobipokegames.service.SiluetaService;
+import com.badobi.badobipokegames.service.LogrosService;
+import com.badobi.badobipokegames.service.RankingGlobalService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,11 +29,17 @@ public class SiluetaController {
             "siluetaRondaTiempo";
 
     private final SiluetaService siluetaService;
+    private final LogrosService logrosService;
+    private final RankingGlobalService rankingService;
 
     public SiluetaController(
-            SiluetaService siluetaService
+            SiluetaService siluetaService,
+            LogrosService logrosService,
+            RankingGlobalService rankingService
     ) {
         this.siluetaService = siluetaService;
+        this.logrosService = logrosService;
+        this.rankingService = rankingService;
     }
 
     @GetMapping("/silueta")
@@ -55,6 +64,7 @@ public class SiluetaController {
                 SESSION_CLASSIC,
                 partida
         );
+        session.removeAttribute("siluetaClasicaRegistrada");
 
         return Map.of(
                 "iniciada", true,
@@ -94,6 +104,7 @@ public class SiluetaController {
     @ResponseBody
     public Map<String, Object> intentoClasico(
             @RequestParam String pokemonName,
+            @CookieValue(name = RankingGlobalService.COOKIE, required = false) String jugadorToken,
             HttpSession session
     ) {
         PartidaSilueta partida =
@@ -117,6 +128,16 @@ public class SiluetaController {
 
         boolean correcto =
                 partida.registrarIntento(pokemonName);
+
+        if (partida.isTerminada() && !Boolean.TRUE.equals(session.getAttribute("siluetaClasicaRegistrada"))) {
+            session.setAttribute("siluetaClasicaRegistrada", true);
+            logrosService.incrementar(jugadorToken, "partidas", 1);
+            if (partida.isVictoria()) {
+                logrosService.actualizarMaximo(jugadorToken, "victorias", 1);
+                logrosService.incrementar(jugadorToken, "silueta-aciertos", 1);
+                rankingService.registrarMejor(jugadorToken, "silueta", PartidaSilueta.MAX_INTENTOS + 1 - partida.getNumeroIntentos());
+            }
+        }
 
         return resultadoClasico(
                 partida,
@@ -143,6 +164,7 @@ public class SiluetaController {
                 SESSION_TIME,
                 ronda
         );
+        session.removeAttribute("siluetaTiempoRegistrada");
 
         return Map.of(
                 "iniciada", true,
@@ -205,6 +227,7 @@ public class SiluetaController {
     @ResponseBody
     public Map<String, Object> intentoTiempo(
             @RequestParam String pokemonName,
+            @CookieValue(name = RankingGlobalService.COOKIE, required = false) String jugadorToken,
             HttpSession session
     ) {
         RondaSiluetaTiempo ronda =
@@ -219,6 +242,7 @@ public class SiluetaController {
         ronda.pausarReloj();
 
         if (ronda.isTerminada()) {
+            registrarTiempo(ronda, jugadorToken, session);
             return resultadoFinalTiempo(ronda);
         }
 
@@ -285,12 +309,15 @@ public class SiluetaController {
             );
         }
 
+        if (ronda.isTerminada()) registrarTiempo(ronda, jugadorToken, session);
+
         return resultado;
     }
 
     @PostMapping("/silueta/tiempo/saltar")
     @ResponseBody
     public Map<String, Object> saltarPokemon(
+            @CookieValue(name = RankingGlobalService.COOKIE, required = false) String jugadorToken,
             HttpSession session
     ) {
         RondaSiluetaTiempo ronda =
@@ -344,12 +371,15 @@ public class SiluetaController {
                 pokemonSaltado
         );
 
+        if (ronda.isTerminada()) registrarTiempo(ronda, jugadorToken, session);
+
         return resultado;
     }
 
     @PostMapping("/silueta/tiempo/finalizar")
     @ResponseBody
     public Map<String, Object> finalizarTiempo(
+            @CookieValue(name = RankingGlobalService.COOKIE, required = false) String jugadorToken,
             HttpSession session
     ) {
         RondaSiluetaTiempo ronda =
@@ -362,8 +392,18 @@ public class SiluetaController {
         }
 
         ronda.finalizar();
+        registrarTiempo(ronda, jugadorToken, session);
 
         return resultadoFinalTiempo(ronda);
+    }
+
+    private void registrarTiempo(RondaSiluetaTiempo ronda, String token, HttpSession session) {
+        if (Boolean.TRUE.equals(session.getAttribute("siluetaTiempoRegistrada"))) return;
+        session.setAttribute("siluetaTiempoRegistrada", true);
+        logrosService.incrementar(token, "partidas", 1);
+        logrosService.actualizarMaximo(token, "silueta-racha", ronda.getMejorRacha());
+        if (ronda.getPuntos() > 0) logrosService.actualizarMaximo(token, "victorias", 1);
+        rankingService.registrarMejor(token, "silueta-tiempo", ronda.getPuntos());
     }
 
     private Map<String, Object> resultadoClasico(

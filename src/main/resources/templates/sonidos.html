@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Sonidos Pokémon | Badobi Pokégames</title>
+
+  <meta
+          name="description"
+          content="Escucha el grito y adivina a qué Pokémon pertenece en cinco intentos."
+  >
+
+  <link
+          rel="canonical"
+          href="https://badobipokegames.onrender.com/sonidos"
+  >
+
+  <link
+          rel="stylesheet"
+          th:href="@{/css/style.css}"
+  >
+</head>
+
+<body>
+<header class="main-header">
+  <a class="logo" th:href="@{/}">
+    Badobi <span>Pokégames</span>
+  </a>
+
+  <nav class="main-nav">
+    <a class="active" th:href="@{/}">Juegos</a>
+    <a th:href="@{/estadisticas}">Estadísticas</a>
+    <a th:href="@{/ranking}">Ranking</a>
+    <a th:href="@{/logros}">Logros</a>
+  </nav>
+
+  <button
+          id="theme-toggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Activar tema oscuro"
+          title="Cambiar tema"
+  >
+    🌙
+  </button>
+</header>
+
+<main class="sound-game-page">
+  <section class="sound-game-hero">
+        <span class="sound-game-eyebrow">
+            🔊 Reconoce su grito
+        </span>
+
+    <h1>Sonidos Pokémon</h1>
+
+    <p>
+      Escucha con atención y descubre qué Pokémon
+      se oculta detrás del sonido.
+    </p>
+  </section>
+
+  <section
+          id="sound-game-setup"
+          class="sound-game-setup"
+  >
+    <div class="sound-game-setup-card">
+      <div class="sound-game-setup-icon">🎧</div>
+
+      <h2>Prepara tus oídos</h2>
+
+      <p>
+        Tendrás cinco intentos y hasta cinco
+        reproducciones para reconocer el grito.
+      </p>
+
+      <label for="sound-game-generation">
+        Elige una generación
+      </label>
+
+      <select id="sound-game-generation">
+        <option value="all">Todas las generaciones</option>
+        <option value="1">Generación I</option>
+        <option value="2">Generación II</option>
+        <option value="3">Generación III</option>
+        <option value="4">Generación IV</option>
+        <option value="5">Generación V</option>
+        <option value="6">Generación VI</option>
+        <option value="7">Generación VII</option>
+        <option value="8">Generación VIII</option>
+        <option value="9">Generación IX</option>
+      </select>
+
+      <button
+              id="sound-game-start"
+              class="sound-game-start"
+              type="button"
+      >
+        Empezar partida
+      </button>
+    </div>
+  </section>
+
+  <section
+          id="sound-game"
+          class="sound-game"
+          hidden
+  >
+    <div class="sound-game-status">
+            <span class="sound-game-attempt-badge">
+                Intento
+                <strong id="sound-game-attempt">1/5</strong>
+            </span>
+
+      <span class="sound-game-play-badge">
+                Reproducciones
+                <strong id="sound-game-play-count">0/5</strong>
+            </span>
+    </div>
+
+    <div class="sound-game-player">
+      <div
+              id="sound-game-mystery"
+              class="sound-game-mystery"
+      >
+        ?
+      </div>
+
+      <div
+              id="sound-game-waves"
+              class="sound-game-waves"
+              aria-hidden="true"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <button
+              id="sound-game-play"
+              class="sound-game-play"
+              type="button"
+      >
+        <span id="sound-game-play-icon">▶</span>
+        <span id="sound-game-play-text">
+                    Reproducir grito
+                </span>
+      </button>
+
+      <audio
+              id="sound-game-audio"
+              preload="auto"
+      ></audio>
+
+      <p id="sound-game-audio-help">
+        Puedes escucharlo hasta cinco veces.
+      </p>
+    </div>
+
+    <form
+            id="sound-game-form"
+            class="sound-game-form"
+            autocomplete="off"
+    >
+      <label for="sound-game-answer">
+        ¿Qué Pokémon produce este sonido?
+      </label>
+
+      <div class="sound-game-controls">
+        <div class="sound-game-search">
+          <input
+                  id="sound-game-answer"
+                  name="pokemonName"
+                  type="text"
+                  placeholder="Escribe un Pokémon..."
+                  autocomplete="off"
+                  required
+                  aria-expanded="false"
+                  aria-controls="sound-game-suggestions"
+          >
+
+          <div
+                  id="sound-game-suggestions"
+                  class="sound-game-suggestions"
+                  role="listbox"
+          ></div>
+        </div>
+
+        <button
+                id="sound-game-submit"
+                type="submit"
+        >
+          Adivinar
+        </button>
+      </div>
+    </form>
+
+    <p
+            id="sound-game-message"
+            class="sound-game-message"
+            aria-live="polite"
+    ></p>
+
+    <section
+            id="sound-game-attempts-section"
+            class="sound-game-attempts-section"
+    >
+      <h2>Intentos realizados</h2>
+
+      <div
+              id="sound-game-attempt-list"
+              class="sound-game-attempt-list"
+      >
+        <p class="sound-game-no-attempts">
+          Todavía no has realizado ningún intento.
+        </p>
+      </div>
+    </section>
+  </section>
+</main>
+
+<div
+        id="sound-game-result-modal"
+        class="sound-game-result-modal"
+        hidden
+>
+  <div
+          class="sound-game-result-card"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="sound-game-result-title"
+  >
+    <div
+            id="sound-game-result-icon"
+            class="sound-game-result-icon"
+    >
+      🎵
+    </div>
+
+    <h2 id="sound-game-result-title">
+      Resultado
+    </h2>
+
+    <img
+            id="sound-game-result-image"
+            src=""
+            alt=""
+            draggable="false"
+    >
+
+    <p id="sound-game-result-text"></p>
+
+    <button
+            id="sound-game-continue"
+            type="button"
+    >
+      Nueva partida
+    </button>
+
+    <a th:href="@{/}">
+      Volver a los juegos
+    </a>
+  </div>
+</div>
+
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/sonidos.js}"></script>
+</body>
+</html>

@@ -2,12 +2,15 @@ package com.badobi.badobipokegames.controller;
 
 import com.badobi.badobipokegames.model.PartidaPokeZoom;
 import com.badobi.badobipokegames.service.PokeZoomService;
+import com.badobi.badobipokegames.service.LogrosService;
+import com.badobi.badobipokegames.service.RankingGlobalService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,11 +36,17 @@ public class PokeZoomController {
     };
 
     private final PokeZoomService pokeZoomService;
+    private final LogrosService logrosService;
+    private final RankingGlobalService rankingService;
 
     public PokeZoomController(
-            PokeZoomService pokeZoomService
+            PokeZoomService pokeZoomService,
+            LogrosService logrosService,
+            RankingGlobalService rankingService
     ) {
         this.pokeZoomService = pokeZoomService;
+        this.logrosService = logrosService;
+        this.rankingService = rankingService;
     }
 
     @GetMapping("/pokezoom")
@@ -98,6 +107,7 @@ public class PokeZoomController {
     @ResponseBody
     public Map<String, Object> comprobarIntento(
             @RequestParam String pokemonName,
+            @CookieValue(name = RankingGlobalService.COOKIE, required = false) String jugadorToken,
             HttpSession session
     ) {
         PartidaPokeZoom partida =
@@ -121,6 +131,15 @@ public class PokeZoomController {
 
         boolean correcto =
                 partida.registrarIntento(pokemonName);
+
+        if (partida.isTerminada()) {
+            logrosService.incrementar(jugadorToken, "partidas", 1);
+            if (partida.isVictoria()) {
+                logrosService.actualizarMaximo(jugadorToken, "victorias", 1);
+                logrosService.incrementar(jugadorToken, "zoom-victorias", 1);
+                rankingService.registrarMejor(jugadorToken, "pokezoom", PartidaPokeZoom.MAX_INTENTOS + 1 - partida.getNumeroIntentos());
+            }
+        }
 
         return crearResultado(partida, correcto);
     }

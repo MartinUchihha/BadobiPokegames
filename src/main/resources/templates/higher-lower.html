@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Higher or Lower Pokémon | Badobi Pokégames</title>
+
+    <meta
+            name="description"
+            content="Compara las estadísticas de dos Pokémon y decide si el segundo tiene un valor mayor o menor."
+    >
+
+    <link
+            rel="canonical"
+            href="https://badobipokegames.onrender.com/higher-lower"
+    >
+
+    <link
+            rel="stylesheet"
+            th:href="@{/css/style.css}"
+    >
+</head>
+
+<body>
+<header class="main-header">
+    <a class="logo" th:href="@{/}">
+        Badobi <span>Pokégames</span>
+    </a>
+
+    <nav class="main-nav">
+        <a class="active" th:href="@{/}">Juegos</a>
+        <a th:href="@{/estadisticas}">Estadísticas</a>
+        <a th:href="@{/ranking}">Ranking</a>
+        <a th:href="@{/logros}">Logros</a>
+    </nav>
+
+    <button
+            id="theme-toggle"
+            class="theme-toggle"
+            type="button"
+            aria-label="Activar tema oscuro"
+            title="Cambiar tema"
+    >
+        🌙
+    </button>
+</header>
+
+<main class="higher-lower-page">
+    <section class="higher-lower-hero">
+        <span class="higher-lower-eyebrow">
+            ¿Mayor o menor?
+        </span>
+
+        <h1>Higher or Lower Pokémon</h1>
+
+        <p>
+            Compara sus estadísticas, construye una racha
+            y supera tu mejor puntuación.
+        </p>
+    </section>
+
+    <section
+            id="higher-lower-setup"
+            class="higher-lower-setup"
+    >
+        <div class="higher-lower-setup-card">
+            <div class="higher-lower-setup-icon">📈</div>
+
+            <h2>Prepara la comparación</h2>
+
+            <p>
+                La estadística cambiará automáticamente
+                después de cada cinco aciertos.
+            </p>
+
+            <label for="higher-lower-generation">
+                Elige una generación
+            </label>
+
+            <select id="higher-lower-generation">
+                <option value="all">Todas las generaciones</option>
+                <option value="1">Generación I</option>
+                <option value="2">Generación II</option>
+                <option value="3">Generación III</option>
+                <option value="4">Generación IV</option>
+                <option value="5">Generación V</option>
+                <option value="6">Generación VI</option>
+                <option value="7">Generación VII</option>
+                <option value="8">Generación VIII</option>
+                <option value="9">Generación IX</option>
+            </select>
+
+            <button
+                    id="higher-lower-start"
+                    class="higher-lower-start"
+                    type="button"
+            >
+                Empezar partida
+            </button>
+        </div>
+    </section>
+
+    <section
+            id="higher-lower-game"
+            class="higher-lower-game"
+            hidden
+    >
+        <div class="higher-lower-toolbar">
+            <div class="higher-lower-score">
+                <span>Puntuación</span>
+                <strong id="higher-lower-score">0</strong>
+            </div>
+
+            <div class="higher-lower-best">
+                <span>Récord</span>
+                <strong id="higher-lower-best">0</strong>
+            </div>
+
+            <button
+                    id="higher-lower-sound"
+                    class="higher-lower-sound"
+                    type="button"
+                    aria-label="Silenciar sonidos"
+                    title="Activar o silenciar sonidos"
+            >
+                🔊
+            </button>
+        </div>
+
+        <div class="higher-lower-stat-banner">
+            <span id="higher-lower-stat-icon">⚔️</span>
+
+            <div>
+                <small>Estadística actual</small>
+                <strong id="higher-lower-stat-name">
+                    Ataque
+                </strong>
+            </div>
+        </div>
+
+        <div class="higher-lower-progress-area">
+            <span id="higher-lower-progress-text">
+                5 aciertos para cambiar
+            </span>
+
+            <div
+                    id="higher-lower-progress"
+                    class="higher-lower-progress"
+                    aria-label="Progreso hacia la siguiente estadística"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div class="higher-lower-battle">
+            <article
+                    id="higher-lower-left-card"
+                    class="higher-lower-card higher-lower-left"
+            >
+                <span class="higher-lower-known">
+                    Valor conocido
+                </span>
+
+                <img
+                        id="higher-lower-left-image"
+                        src=""
+                        alt=""
+                        draggable="false"
+                >
+
+                <h2 id="higher-lower-left-name">
+                    Pokémon
+                </h2>
+
+                <div class="higher-lower-value">
+                    <span id="higher-lower-left-label">
+                        Ataque
+                    </span>
+
+                    <strong id="higher-lower-left-value">
+                        0
+                    </strong>
+                </div>
+            </article>
+
+            <div class="higher-lower-versus">
+                VS
+            </div>
+
+            <article
+                    id="higher-lower-right-card"
+                    class="higher-lower-card higher-lower-right"
+            >
+                <span class="higher-lower-question">
+                    ¿Mayor o menor?
+                </span>
+
+                <img
+                        id="higher-lower-right-image"
+                        src=""
+                        alt=""
+                        draggable="false"
+                >
+
+                <h2 id="higher-lower-right-name">
+                    Pokémon
+                </h2>
+
+                <div class="higher-lower-value">
+                    <span id="higher-lower-right-label">
+                        Ataque
+                    </span>
+
+                    <strong id="higher-lower-right-value">
+                        ?
+                    </strong>
+                </div>
+
+                <div class="higher-lower-actions">
+                    <button
+                            id="higher-lower-higher"
+                            class="higher-lower-choice higher"
+                            type="button"
+                    >
+                        <span>▲</span>
+                        Mayor
+                    </button>
+
+                    <button
+                            id="higher-lower-lower"
+                            class="higher-lower-choice lower"
+                            type="button"
+                    >
+                        <span>▼</span>
+                        Menor
+                    </button>
+                </div>
+            </article>
+        </div>
+
+        <p
+                id="higher-lower-message"
+                class="higher-lower-message"
+                aria-live="polite"
+        ></p>
+    </section>
+</main>
+
+<div
+        id="higher-lower-result-modal"
+        class="higher-lower-result-modal"
+        hidden
+>
+    <div
+            class="higher-lower-result-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="higher-lower-result-title"
+    >
+        <div
+                id="higher-lower-result-icon"
+                class="higher-lower-result-icon"
+        >
+            📊
+        </div>
+
+        <h2 id="higher-lower-result-title">
+            Fin de la partida
+        </h2>
+
+        <p id="higher-lower-result-text"></p>
+
+        <div class="higher-lower-result-score">
+            <span>Puntuación final</span>
+            <strong id="higher-lower-final-score">0</strong>
+        </div>
+
+        <button
+                id="higher-lower-restart"
+                type="button"
+        >
+            Jugar otra vez
+        </button>
+
+        <a th:href="@{/}">
+            Volver a los juegos
+        </a>
+    </div>
+</div>
+
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/higher-lower.js}"></script>
+</body>
+</html>

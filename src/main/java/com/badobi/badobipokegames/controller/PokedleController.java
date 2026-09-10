@@ -2,11 +2,14 @@ package com.badobi.badobipokegames.controller;
 
 import com.badobi.badobipokegames.model.Pokemon;
 import com.badobi.badobipokegames.service.PokeApiService;
+import com.badobi.badobipokegames.service.LogrosService;
+import com.badobi.badobipokegames.service.RankingGlobalService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,9 +25,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PokedleController {
 
     private final PokeApiService pokeApiService;
+    private final LogrosService logrosService;
+    private final RankingGlobalService rankingService;
 
-    public PokedleController(PokeApiService pokeApiService) {
+    public PokedleController(PokeApiService pokeApiService, LogrosService logrosService, RankingGlobalService rankingService) {
         this.pokeApiService = pokeApiService;
+        this.logrosService = logrosService;
+        this.rankingService = rankingService;
     }
 
     @GetMapping("/pokedle")
@@ -96,6 +103,7 @@ public class PokedleController {
     @ResponseBody
     public Map<String, Object> comprobarSinRecargar(
             @RequestParam String pokemonName,
+            @CookieValue(name = RankingGlobalService.COOKIE, required = false) String jugadorToken,
             HttpSession session
     ) {
         Map<String, Object> resultado = new LinkedHashMap<>();
@@ -191,6 +199,17 @@ public class PokedleController {
             resultado.put("coincidencias", coincidencias);
             int cantidadIntentos = intentos.size();
 
+            if ((acierto || derrota) && !Boolean.TRUE.equals(session.getAttribute("pokedleGlobalRegistrada"))) {
+                session.setAttribute("pokedleGlobalRegistrada", true);
+                logrosService.incrementar(jugadorToken, "partidas", 1);
+                if (acierto) {
+                    logrosService.actualizarMaximo(jugadorToken, "victorias", 1);
+                    logrosService.incrementar(jugadorToken, "pokedle-victorias", 1);
+                    if (cantidadIntentos == 1) logrosService.actualizarMaximo(jugadorToken, "pokedle-mejor", 1);
+                    rankingService.registrarMejor(jugadorToken, "pokedle", Math.max(1, 20 - cantidadIntentos));
+                }
+            }
+
             resultado.put("cantidadIntentos", cantidadIntentos);
 
             boolean modoTodasGeneraciones =
@@ -263,6 +282,7 @@ public class PokedleController {
         session.removeAttribute("pokemonOculto");
         session.removeAttribute("intentos");
         session.removeAttribute("partidaGanada");
+        session.removeAttribute("pokedleGlobalRegistrada");
 
         return "redirect:/pokedle";
     }

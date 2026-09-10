@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Adivina por estadísticas | Badobi Pokégames</title>
+
+  <meta
+          name="description"
+          content="Adivina el Pokémon observando sus seis estadísticas base y sigue las pistas de cada intento."
+  >
+
+  <link
+          rel="canonical"
+          href="https://badobipokegames.onrender.com/adivina-estadisticas"
+  >
+
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link
+          rel="stylesheet"
+          th:href="@{/css/adivina-estadisticas.css}"
+  >
+</head>
+
+<body>
+
+<header class="main-header">
+  <a class="logo" th:href="@{/}">
+    Badobi <span>Pokégames</span>
+  </a>
+
+  <nav class="main-nav">
+    <a th:href="@{/}">Juegos</a>
+    <a th:href="@{/estadisticas}">Estadísticas</a>
+    <a th:href="@{/ranking}">Ranking</a>
+    <a th:href="@{/logros}">Logros</a>
+  </nav>
+
+  <button
+          id="theme-toggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Activar tema oscuro"
+          title="Cambiar tema"
+  >
+    🌙
+  </button>
+</header>
+
+<main class="stats-game-page">
+
+  <section class="stats-hero">
+        <span class="stats-kicker">
+            Desafío de entrenador
+        </span>
+
+    <h1>Adivina por estadísticas</h1>
+
+    <p>
+      Descubre al Pokémon oculto usando sus seis estadísticas base.
+      Cada respuesta te indicará si debes buscar un valor mayor o menor.
+    </p>
+  </section>
+
+  <section
+          id="game-setup"
+          class="stats-panel game-setup"
+  >
+    <div>
+            <span class="panel-eyebrow">
+                Configura la partida
+            </span>
+
+      <h2>Elige una generación</h2>
+
+      <p>
+        Tendrás seis intentos para encontrar al Pokémon.
+      </p>
+    </div>
+
+    <label for="generation-select">
+      Generación
+    </label>
+
+    <select id="generation-select">
+      <option value="all">
+        Todas las generaciones
+      </option>
+
+      <option value="1">Generación I</option>
+      <option value="2">Generación II</option>
+      <option value="3">Generación III</option>
+      <option value="4">Generación IV</option>
+      <option value="5">Generación V</option>
+      <option value="6">Generación VI</option>
+      <option value="7">Generación VII</option>
+      <option value="8">Generación VIII</option>
+      <option value="9">Generación IX</option>
+    </select>
+
+    <button
+            id="start-game-button"
+            class="primary-game-button"
+            type="button"
+    >
+      Comenzar partida
+    </button>
+  </section>
+
+  <section
+          id="game-area"
+          class="game-area"
+          hidden
+  >
+    <div class="game-status-bar">
+            <span id="attempt-indicator">
+                Intento 1/6
+            </span>
+
+      <span id="generation-indicator">
+                Todas las generaciones
+            </span>
+    </div>
+
+    <section class="stats-panel secret-stats-card">
+
+      <div class="secret-heading">
+        <div>
+                    <span class="panel-eyebrow">
+                        Pokémon misterioso
+                    </span>
+
+          <h2>Sus estadísticas base</h2>
+        </div>
+
+        <div
+                class="mystery-ball"
+                aria-hidden="true"
+        >
+          ?
+        </div>
+      </div>
+
+      <div class="stats-visual-layout">
+
+        <div class="radar-wrapper">
+          <canvas
+                  id="stats-radar"
+                  width="440"
+                  height="400"
+                  aria-label="Gráfico de estadísticas del Pokémon oculto"
+          ></canvas>
+        </div>
+
+        <div
+                id="secret-stat-list"
+                class="secret-stat-list"
+        >
+          <div
+                  class="stat-row"
+                  data-stat="ps"
+          >
+            <span>PS</span>
+            <div class="stat-track">
+              <i></i>
+            </div>
+            <strong id="stat-ps">0</strong>
+          </div>
+
+          <div
+                  class="stat-row"
+                  data-stat="ataque"
+          >
+            <span>Ataque</span>
+            <div class="stat-track">
+              <i></i>
+            </div>
+            <strong id="stat-ataque">0</strong>
+          </div>
+
+          <div
+                  class="stat-row"
+                  data-stat="defensa"
+          >
+            <span>Defensa</span>
+            <div class="stat-track">
+              <i></i>
+            </div>
+            <strong id="stat-defensa">0</strong>
+          </div>
+
+          <div
+                  class="stat-row"
+                  data-stat="ataqueEspecial"
+          >
+            <span>At. especial</span>
+            <div class="stat-track">
+              <i></i>
+            </div>
+            <strong id="stat-ataque-especial">
+              0
+            </strong>
+          </div>
+
+          <div
+                  class="stat-row"
+                  data-stat="defensaEspecial"
+          >
+            <span>Def. especial</span>
+            <div class="stat-track">
+              <i></i>
+            </div>
+            <strong id="stat-defensa-especial">
+              0
+            </strong>
+          </div>
+
+          <div
+                  class="stat-row"
+                  data-stat="velocidad"
+          >
+            <span>Velocidad</span>
+            <div class="stat-track">
+              <i></i>
+            </div>
+            <strong id="stat-velocidad">
+              0
+            </strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-panel guess-panel">
+
+      <form
+              id="stats-guess-form"
+              class="stats-guess-form"
+      >
+        <label for="pokemon-name">
+          ¿Qué Pokémon tiene estas estadísticas?
+        </label>
+
+        <div class="stats-guess-controls">
+
+          <div class="pokemon-search">
+            <input
+                    id="pokemon-name"
+                    name="pokemonName"
+                    type="text"
+                    placeholder="Escribe un Pokémon..."
+                    autocomplete="off"
+                    required
+            >
+
+            <div
+                    id="pokemon-suggestions"
+                    class="pokemon-suggestions"
+            ></div>
+          </div>
+
+          <button
+                  class="primary-game-button"
+                  type="submit"
+          >
+            Adivinar
+          </button>
+        </div>
+      </form>
+
+      <p
+              id="game-message"
+              class="game-message"
+              aria-live="polite"
+      ></p>
+    </section>
+    <section
+            id="movement-hints"
+            class="movement-hints"
+            hidden
+    >
+      <div class="movement-hints-icon">
+        💥
+      </div>
+
+      <div>
+                <span class="panel-eyebrow">
+                    Pista desbloqueada
+                </span>
+
+        <h2>Movimientos que puede aprender</h2>
+
+        <div
+                id="movement-hints-list"
+                class="movement-hints-list"
+        ></div>
+      </div>
+    </section>
+    <section
+            id="attempts-section"
+            class="attempts-section"
+            hidden
+    >
+      <div class="attempts-heading">
+        <div>
+                    <span class="panel-eyebrow">
+                        Tu investigación
+                    </span>
+
+          <h2>Intentos anteriores</h2>
+        </div>
+
+        <span
+                id="attempt-counter"
+                class="attempt-counter"
+        >
+                    0
+                </span>
+      </div>
+
+      <div class="comparison-legend">
+                <span>
+                    <i class="legend-icon higher">↑</i>
+                    Busca un valor mayor
+                </span>
+
+        <span>
+                    <i class="legend-icon equal">＝</i>
+                    Valor correcto
+                </span>
+
+        <span>
+                    <i class="legend-icon lower">↓</i>
+                    Busca un valor menor
+                </span>
+      </div>
+
+      <div
+              id="attempts-list"
+              class="attempts-list"
+      ></div>
+    </section>
+  </section>
+</main>
+
+<div
+        id="result-modal"
+        class="result-modal"
+        hidden
+>
+  <div
+          class="result-card"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="result-title"
+  >
+        <span
+                id="result-icon"
+                class="result-icon"
+                aria-hidden="true"
+        >
+            🏆
+        </span>
+
+    <p
+            id="result-kicker"
+            class="result-kicker"
+    >
+      ¡Pokémon descubierto!
+    </p>
+
+    <h2 id="result-title">
+      ¡Victoria!
+    </h2>
+
+    <img
+            id="result-image"
+            src=""
+            alt="Pokémon de la partida"
+    >
+
+    <strong id="result-pokemon-name"></strong>
+
+    <p id="result-description"></p>
+
+    <button
+            id="play-again-button"
+            class="primary-game-button"
+            type="button"
+    >
+      Jugar otra vez
+    </button>
+  </div>
+</div>
+
+<footer>
+  <p>
+    Badobi Pokégames — Proyecto creado para fans de Pokémon
+  </p>
+</footer>
+
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/adivina-estadisticas.js}"></script>
+</body>
+</html>

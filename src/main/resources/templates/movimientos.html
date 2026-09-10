@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PokéMovimientos | Badobi Pokégames</title>
+
+  <meta
+          name="description"
+          content="Adivina el Pokémon utilizando los movimientos que puede aprender."
+  >
+
+  <link
+          rel="canonical"
+          href="https://badobipokegames.onrender.com/movimientos"
+  >
+
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/movimientos.css}">
+</head>
+
+<body>
+
+<header class="main-header">
+  <a class="logo" th:href="@{/}">
+    Badobi <span>Pokégames</span>
+  </a>
+
+  <nav class="main-nav">
+    <a th:href="@{/}">Juegos</a>
+    <a th:href="@{/estadisticas}">Estadísticas</a>
+    <a th:href="@{/ranking}">Ranking</a>
+    <a th:href="@{/logros}">Logros</a>
+  </nav>
+
+  <button
+          id="theme-toggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Activar tema oscuro"
+          title="Cambiar tema"
+  >
+    🌙
+  </button>
+</header>
+
+<main class="moves-page">
+
+  <section class="moves-hero">
+        <span class="moves-kicker">
+            Desafío de movimientos
+        </span>
+
+    <h1>
+      ¿Quién aprende estos movimientos?
+    </h1>
+
+    <p>
+    Analiza su repertorio y descubre al Pokémon oculto
+    antes de agotar tus seis intentos.
+    </p>
+  </section>
+
+  <section
+          id="moves-setup"
+          class="moves-panel moves-setup"
+  >
+    <div class="setup-heading">
+            <span class="panel-eyebrow">
+                Configura la partida
+            </span>
+
+      <h2>Elige cómo quieres jugar</h2>
+    </div>
+
+    <label for="moves-generation">
+      Generación
+    </label>
+
+    <select id="moves-generation">
+      <option value="all">Todas las generaciones</option>
+      <option value="1">Generación I</option>
+      <option value="2">Generación II</option>
+      <option value="3">Generación III</option>
+      <option value="4">Generación IV</option>
+      <option value="5">Generación V</option>
+      <option value="6">Generación VI</option>
+      <option value="7">Generación VII</option>
+      <option value="8">Generación VIII</option>
+      <option value="9">Generación IX</option>
+    </select>
+
+    <div class="mode-selector">
+      <button
+              class="mode-option selected"
+              type="button"
+              data-mode="normal"
+      >
+        <strong>Normal</strong>
+        <span>Todos los movimientos de nivel</span>
+      </button>
+
+      <button
+              class="mode-option"
+              type="button"
+              data-mode="dificil"
+      >
+      <strong>Difícil</strong>
+      <span>Movimientos progresivos con detalles</span>
+      </button>
+    </div>
+
+    <button
+            id="moves-start"
+            class="moves-primary-button"
+            type="button"
+    >
+      Comenzar partida
+    </button>
+  </section>
+  <section id="moves-game" class="moves-game" hidden>
+
+    <div class="moves-status">
+            <span id="moves-attempt">
+                Intento 1/6
+            </span>
+
+      <span id="moves-mode">
+                Modo normal
+            </span>
+
+      <span id="moves-generation-label">
+                Todas las generaciones
+            </span>
+    </div>
+
+    <section class="moves-panel clues-panel">
+      <div class="clues-heading">
+        <div>
+                    <span class="panel-eyebrow">
+                        Repertorio misterioso
+                    </span>
+
+          <h2>Movimientos que puede aprender</h2>
+        </div>
+
+        <span
+                id="moves-count"
+                class="moves-count"
+        >
+                    0
+                </span>
+      </div>
+
+      <div
+              id="pokemon-type-hint"
+              class="pokemon-type-hint"
+              hidden
+      >
+        <strong>Última pista:</strong>
+        <span>Tipo del Pokémon:</span>
+
+        <div id="pokemon-type-list"></div>
+      </div>
+
+      <div
+              id="moves-list"
+              class="moves-list"
+      ></div>
+    </section>
+
+    <section class="moves-panel moves-guess-panel">
+      <form id="moves-form">
+        <label for="moves-pokemon-name">
+          Escribe el nombre del Pokémon
+        </label>
+
+        <div class="moves-guess-controls">
+          <div class="moves-search">
+            <input
+                    id="moves-pokemon-name"
+                    name="pokemonName"
+                    type="text"
+                    placeholder="Escribe un Pokémon..."
+                    autocomplete="off"
+                    required
+            >
+
+            <div
+                    id="moves-suggestions"
+                    class="moves-suggestions"
+            ></div>
+          </div>
+
+          <button
+                  class="moves-primary-button"
+                  type="submit"
+          >
+            Adivinar
+          </button>
+        </div>
+      </form>
+
+      <p
+              id="moves-message"
+              class="moves-message"
+              aria-live="polite"
+      ></p>
+    </section>
+    <section
+            id="moves-attempts-section"
+            class="moves-attempts-section"
+            hidden
+    >
+      <div class="attempts-heading">
+        <div>
+                    <span class="panel-eyebrow">
+                        Tus respuestas
+                    </span>
+
+          <h2>Intentos anteriores</h2>
+        </div>
+
+        <span
+                id="moves-attempt-counter"
+                class="moves-attempt-counter"
+        >
+                    0
+                </span>
+      </div>
+
+      <div
+              id="moves-attempts-list"
+              class="moves-attempts-list"
+      ></div>
+    </section>
+
+  </section>
+</main>
+
+<div
+        id="moves-result-modal"
+        class="moves-result-modal"
+        hidden
+>
+  <div
+          class="moves-result-card"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="moves-result-title"
+  >
+        <span
+                id="moves-result-icon"
+                class="moves-result-icon"
+                aria-hidden="true"
+        >
+            🏆
+        </span>
+
+    <p
+            id="moves-result-kicker"
+            class="moves-result-kicker"
+    >
+      ¡Pokémon descubierto!
+    </p>
+
+    <h2 id="moves-result-title">
+      ¡Victoria!
+    </h2>
+
+    <img
+            id="moves-result-image"
+            src=""
+            alt=""
+            draggable="false"
+    >
+
+    <strong id="moves-result-name"></strong>
+
+    <div
+            id="moves-result-types"
+            class="moves-result-types"
+    ></div>
+
+    <p id="moves-result-description"></p>
+
+    <button
+            id="moves-play-again"
+            class="moves-primary-button"
+            type="button"
+    >
+      Jugar otra vez
+    </button>
+
+    <a
+            class="moves-home-link"
+            th:href="@{/}"
+    >
+      Volver a los juegos
+    </a>
+  </div>
+</div>
+
+<footer>
+  <p>
+    Badobi Pokégames — Proyecto creado para fans de Pokémon
+  </p>
+</footer>
+
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/movimientos.js}"></script>
+</body>
+</html>

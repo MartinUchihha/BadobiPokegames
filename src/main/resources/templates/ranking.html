@@ -3,154 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Ranking | Badobi Pokégames</title>
-
+    <title>Ranking global | Badobi Pokégames</title>
+    <meta name="description" content="Descubre los mejores entrenadores de Badobi Pokégames y compite en el ranking global de cada temporada.">
+    <link rel="canonical" href="https://badobipokegames.onrender.com/ranking">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/ranking-global.css}">
 </head>
-
 <body>
-
 <header class="main-header">
-    <a class="logo" th:href="@{/}">
-        Badobi <span>Pokégames</span>
-    </a>
-
+    <a class="logo" th:href="@{/}">Badobi <span>Pokégames</span></a>
     <nav class="main-nav">
         <a th:href="@{/}">Juegos</a>
         <a th:href="@{/estadisticas}">Estadísticas</a>
         <a class="active" th:href="@{/ranking}">Ranking</a>
         <a th:href="@{/logros}">Logros</a>
     </nav>
-
-    <button
-            id="theme-toggle"
-            class="theme-toggle"
-            type="button"
-            aria-label="Activar tema oscuro"
-            title="Cambiar tema"
-    >
-        🌙
-    </button>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Activar tema oscuro">🌙</button>
 </header>
 
-<main class="ranking-page">
-    <a class="back-link" th:href="@{/pokedle}">
-        ← Volver a Pokédle
-    </a>
-
-    <section class="ranking-hero">
-        <p class="eyebrow">Tus mejores resultados</p>
-        <h1>Ranking personal</h1>
-
-        <p>
-            Compara tus mejores partidas por intentos,
-            tiempo, generación y modo.
-        </p>
+<main class="global-ranking-page">
+    <section class="global-ranking-hero">
+        <p class="ranking-eyebrow">COMPITE CON TODA LA COMUNIDAD</p>
+        <h1>Ranking global</h1>
+        <p>Supera tus récords, consigue experiencia y alcanza la cima de Badobi Pokégames.</p>
+        <div class="season-card">
+            <span>🏆 TEMPORADA ACTUAL</span>
+            <strong id="season-name">Cargando temporada...</strong>
+            <small id="season-end"></small>
+        </div>
     </section>
 
-    <section class="ranking-controls">
+    <section id="profile-create" class="ranking-panel profile-create">
         <div>
-            <label for="ranking-generation">
-                Generación
+            <small>CREA TU IDENTIDAD</small>
+            <h2>Elige tu nombre de entrenador</h2>
+            <p>Este será el nombre que verán los demás jugadores. No publiques información personal.</p>
+        </div>
+        <form id="profile-form">
+            <label for="profile-name">Nombre público</label>
+            <div>
+                <input id="profile-name" name="nombre" maxlength="20" autocomplete="nickname" placeholder="Ejemplo: Badobi" required>
+                <button type="submit">Crear entrenador</button>
+            </div>
+            <p id="profile-message" aria-live="polite"></p>
+        </form>
+    </section>
+
+    <section id="profile-ready" class="ranking-panel profile-ready" hidden>
+        <div id="profile-avatar" class="profile-avatar">⚡</div>
+        <div><small>TU ENTRENADOR</small><h2 id="profile-player-name"></h2><p>Tus mejores resultados ya participan en esta temporada.</p></div>
+    </section>
+
+    <section class="ranking-panel ranking-board">
+        <div class="board-heading">
+            <div><small>CLASIFICACIÓN</small><h2>Mejores entrenadores</h2></div>
+            <label for="global-ranking-game">Juego
+                <select id="global-ranking-game">
+                    <option value="general">Ranking general</option>
+                    <option value="pokedle">Pokédle</option>
+                    <option value="fusion">PokéFusion</option>
+                    <option value="silueta">Siluetas · Clásico</option>
+                    <option value="silueta-tiempo">Siluetas · Contrarreloj</option>
+                    <option value="pokeprice">PokéPrice</option>
+                    <option value="higher-lower">Higher or Lower</option>
+                    <option value="stat-battle">Stat Battle</option>
+                    <option value="trivia">Trivia</option>
+                    <option value="pokezoom">PokéZoom</option>
+                    <option value="sonidos">Sonidos</option>
+                    <option value="movimientos">Movimientos</option>
+                    <option value="adivina-estadisticas">Estadísticas</option>
+                </select>
             </label>
-
-            <select id="ranking-generation">
-                <option value="all">Todas</option>
-                <option value="Generación I">Generación I</option>
-                <option value="Generación II">Generación II</option>
-                <option value="Generación III">Generación III</option>
-                <option value="Generación IV">Generación IV</option>
-                <option value="Generación V">Generación V</option>
-                <option value="Generación VI">Generación VI</option>
-                <option value="Generación VII">Generación VII</option>
-                <option value="Generación VIII">Generación VIII</option>
-                <option value="Generación IX">Generación IX</option>
-            </select>
         </div>
 
-        <div>
-            <label for="ranking-mode">Modo</label>
-
-            <select id="ranking-mode">
-                <option value="all">Todos</option>
-                <option value="Normal">Normal</option>
-                <option value="Difícil">Difícil</option>
-            </select>
-        </div>
-
-        <button id="clear-ranking" type="button">
-            Borrar ranking
-        </button>
-    </section>
-
-    <section class="ranking-content">
-        <div id="ranking-empty" class="ranking-empty">
-            <span>🏁</span>
-            <h2>Todavía no hay resultados</h2>
-            <p>
-                Gana una partida de Pokédle para aparecer
-                en tu ranking personal.
-            </p>
-
-            <a th:href="@{/pokedle}">
-                Jugar Pokédle
-            </a>
-        </div>
-
-        <div
-                id="ranking-table-wrapper"
-                class="ranking-table-wrapper is-hidden"
-        >
-            <table class="ranking-table">
-                <thead>
-                <tr>
-                    <th>Posición</th>
-                    <th>Generación</th>
-                    <th>Modo</th>
-                    <th>Intentos</th>
-                    <th>Tiempo</th>
-                    <th>Fecha</th>
-                </tr>
-                </thead>
-
-                <tbody id="ranking-body"></tbody>
+        <p id="ranking-status" class="ranking-status" aria-live="polite">Cargando clasificación...</p>
+        <div id="global-ranking-wrapper" class="global-ranking-wrapper" hidden>
+            <table class="global-ranking-table">
+                <thead><tr><th>Posición</th><th>Entrenador</th><th id="score-heading">Experiencia</th><th>XP</th></tr></thead>
+                <tbody id="global-ranking-body"></tbody>
             </table>
         </div>
+    </section>
+
+    <section class="prize-preview">
+        <span>🎁</span>
+        <div><strong>Temporadas de dos meses</strong><p>Los premios y sus bases se anunciarán claramente antes de activar la primera competencia oficial.</p></div>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>
-        Badobi Pokégames — Creado por
-        <a
-                href="https://www.youtube.com/@Badobipkm"
-                target="_blank"
-                rel="noopener noreferrer"
-        >
-            Badobi
-        </a>
-    </p>
-
-    <p class="fan-disclaimer">
-        Proyecto fan no oficial, sin afiliación con Nintendo,
-        Game Freak, Creatures Inc. ni The Pokémon Company.
-    </p>
-
-    <p class="api-credit">
-        Datos e imágenes obtenidos mediante
-        <a
-                href="https://pokeapi.co/"
-                target="_blank"
-                rel="noopener noreferrer"
-        >
-            PokéAPI
-        </a>.
-    </p>
+    <p>Badobi Pokégames — Creado por <a href="https://www.youtube.com/@Badobipkm" target="_blank" rel="noopener noreferrer">Badobi</a></p>
+    <p class="fan-disclaimer">Proyecto fan no oficial, sin afiliación con Nintendo, Game Freak, Creatures Inc. ni The Pokémon Company.</p>
 </footer>
-
 <script th:src="@{/js/theme.js}"></script>
 <script th:src="@{/js/ranking.js}"></script>
-
 </body>
 </html>
