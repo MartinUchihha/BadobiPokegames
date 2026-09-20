@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html
+        lang="es"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        PokéMatch VS | Encuentra parejas Pokémon
+    </title>
+
+    <meta
+            name="description"
+            content="Encuentra parejas Pokémon en un tablero por capas y compite contra entrenadores en PokéMatch VS."
+    >
+
+    <link
+            rel="canonical"
+            href="https://badobipokegames.onrender.com/pokematch"
+    >
+
+    <link
+            rel="stylesheet"
+            th:href="@{/css/style.css}"
+    >
+
+    <link
+            rel="stylesheet"
+            th:href="@{/css/pokematch.css}"
+    >
+
+    <script
+            th:src="@{/js/theme.js}"
+            defer
+    ></script>
+
+    <script
+            th:src="@{/js/pokematch.js}"
+            defer
+    ></script>
+</head>
+
+<body class="pokematch-body">
+
+<header class="main-header">
+    <a
+            class="logo"
+            th:href="@{/}"
+    >
+        Badobi <span>Pokégames</span>
+    </a>
+
+    <nav class="main-nav">
+        <a
+                class="active"
+                th:href="@{/}"
+        >
+            Juegos
+        </a>
+
+        <a th:href="@{/estadisticas}">
+            Estadísticas
+        </a>
+
+        <a th:href="@{/ranking}">
+            Ranking
+        </a>
+
+        <a th:href="@{/logros}">
+            Logros
+        </a>
+    </nav>
+
+    <button
+            id="theme-toggle"
+            class="theme-toggle"
+            type="button"
+            aria-label="Cambiar tema"
+            title="Cambiar tema"
+    >
+        🌙
+    </button>
+</header>
+
+<main class="pokematch-page">
+
+    <section
+            id="match-setup"
+            class="match-setup"
+    >
+        <p class="match-eyebrow">
+            NUEVO DESAFÍO
+        </p>
+
+        <h1>PokéMatch VS</h1>
+
+        <p class="match-introduction">
+            Encuentra las parejas, libera las fichas
+            bloqueadas y consigue el combo más alto.
+        </p>
+
+        <div class="mode-selector">
+            <button
+                    class="mode-card selected"
+                    type="button"
+                    data-mode="individual"
+            >
+                <span class="mode-icon">🧩</span>
+
+                <span class="mode-information">
+                    <strong>Individual</strong>
+                    <small>
+                        Completa el tablero y supera
+                        tu mejor puntuación.
+                    </small>
+                </span>
+
+                <span class="mode-check">✓</span>
+            </button>
+
+            <button
+                    class="mode-card"
+                    type="button"
+                    data-mode="versus_ia"
+            >
+                <span class="mode-icon">⚔️</span>
+
+                <span class="mode-information">
+                    <strong>Versus</strong>
+                    <small>
+                        Compite contra un entrenador
+                        Pokémon.
+                    </small>
+                </span>
+
+                <span class="mode-check">✓</span>
+            </button>
+        </div>
+
+        <div class="size-selector-section">
+            <div class="size-selector-heading">
+                <div>
+                    <span class="size-selector-label">
+                        TAMAÑO DEL TABLERO
+                    </span>
+                    <strong>Elige tu desafío</strong>
+                </div>
+
+                <span class="recommended-size">
+                    48 recomendado
+                </span>
+            </div>
+
+            <div class="size-selector">
+                <button
+                        class="size-card"
+                        type="button"
+                        data-tiles="24"
+                        data-seconds="90"
+                >
+                    <strong>24</strong>
+                    <span>fichas</span>
+                    <small>12 parejas · Rápido</small>
+                </button>
+
+                <button
+                        class="size-card selected"
+                        type="button"
+                        data-tiles="48"
+                        data-seconds="180"
+                >
+                    <strong>48</strong>
+                    <span>fichas</span>
+                    <small>24 parejas · Normal</small>
+                </button>
+
+                <button
+                        class="size-card"
+                        type="button"
+                        data-tiles="72"
+                        data-seconds="300"
+                >
+                    <strong>72</strong>
+                    <span>fichas</span>
+                    <small>36 parejas · Difícil</small>
+                </button>
+
+                <button
+                        class="size-card"
+                        type="button"
+                        data-tiles="144"
+                        data-seconds="600"
+                >
+                    <strong>144</strong>
+                    <span>fichas</span>
+                    <small>72 parejas · Maestro</small>
+                </button>
+            </div>
+        </div>
+
+        <div class="match-rules">
+            <div>
+                <span>🎴</span>
+                <strong id="setup-tile-count">
+                    48 fichas
+                </strong>
+                <small id="setup-pair-count">
+                    24 parejas
+                </small>
+            </div>
+
+            <div>
+                <span>⏱️</span>
+                <strong id="setup-time">
+                    3 minutos
+                </strong>
+                <small>Partidas rápidas</small>
+            </div>
+
+            <div>
+                <span>🔥</span>
+                <strong>Combos</strong>
+                <small>Premian tu precisión</small>
+            </div>
+        </div>
+
+        <button
+                id="start-match"
+                class="start-match-button"
+                type="button"
+        >
+            COMENZAR PARTIDA
+        </button>
+
+        <p
+                id="setup-error"
+                class="setup-error"
+                role="alert"
+                hidden
+        ></p>
+    </section>
+
+    <section
+            id="match-game"
+            class="match-game"
+            hidden
+    >
+        <div class="versus-header">
+
+            <article class="player-status player-user">
+                <div class="player-identity">
+                    <div class="player-avatar">
+                        🧢
+                    </div>
+
+                    <div>
+                        <span class="player-label">
+                            JUGADOR
+                        </span>
+
+                        <strong id="player-name">
+                            TÚ
+                        </strong>
+                    </div>
+                </div>
+
+                <div class="player-progress-information">
+                    <span id="player-progress">
+                        0 / 16
+                    </span>
+
+                    <span id="player-score">
+                        0 pts
+                    </span>
+                </div>
+
+                <div class="progress-track">
+                    <div
+                            id="player-progress-bar"
+                            class="progress-fill player-fill"
+                    ></div>
+                </div>
+            </article>
+
+            <div class="match-center">
+                <span
+                        id="match-versus-badge"
+                        class="versus-badge"
+                >
+                    VS
+                </span>
+
+                <strong
+                        id="match-timer"
+                        class="match-timer"
+                >
+                    03:00
+                </strong>
+            </div>
+
+            <article
+                    id="rival-status"
+                    class="player-status player-rival"
+            >
+                <div class="player-identity rival-identity">
+                    <div class="player-avatar rival-avatar">
+                        <img
+                                id="rival-image"
+                                alt="Entrenador rival"
+                        >
+                    </div>
+
+                    <div>
+                        <span class="player-label">
+                            RIVAL
+                        </span>
+
+                        <strong id="rival-name">
+                            Entrenador
+                        </strong>
+
+                        <small
+                                id="rival-difficulty"
+                                class="rival-difficulty"
+                        >
+                            Normal
+                        </small>
+                    </div>
+                </div>
+
+                <div class="player-progress-information">
+                    <span id="rival-progress">
+                        0 / 16
+                    </span>
+
+                    <span id="rival-score">
+                        0 pts
+                    </span>
+                </div>
+
+                <div class="progress-track">
+                    <div
+                            id="rival-progress-bar"
+                            class="progress-fill rival-fill"
+                    ></div>
+                </div>
+            </article>
+
+        </div>
+
+        <div class="match-information-bar">
+            <div>
+                <span>PUNTUACIÓN</span>
+                <strong id="current-score">
+                    0
+                </strong>
+            </div>
+
+            <div class="combo-information">
+                <span>COMBO</span>
+                <strong id="current-combo">
+                    ×0
+                </strong>
+            </div>
+
+            <button
+                    id="leave-match"
+                    class="leave-match-button"
+                    type="button"
+            >
+                Salir
+            </button>
+        </div>
+
+        <section class="board-container">
+            <div
+                    id="match-board"
+                    class="match-board"
+                    aria-label="Tablero de parejas Pokémon"
+            ></div>
+
+            <div
+                    id="board-loading"
+                    class="board-loading"
+            >
+                <div class="pokeball-loader"></div>
+                <span>Preparando tablero...</span>
+            </div>
+        </section>
+
+        <div
+                id="match-message"
+                class="match-message"
+                aria-live="polite"
+        ></div>
+
+        <p class="board-help">
+            Las fichas iluminadas están disponibles.
+            Elimina las que están arriba para descubrir
+            las fichas bloqueadas.
+        </p>
+    </section>
+
+</main>
+
+<div
+        id="result-overlay"
+        class="result-overlay"
+        hidden
+>
+    <section
+            class="result-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="result-title"
+    >
+        <div
+                id="result-icon"
+                class="result-icon"
+        >
+            🏆
+        </div>
+
+        <p
+                id="result-eyebrow"
+                class="result-eyebrow"
+        >
+            PARTIDA TERMINADA
+        </p>
+
+        <h2 id="result-title">
+            ¡Victoria!
+        </h2>
+
+        <p id="result-description">
+            Completaste todas las parejas.
+        </p>
+
+        <div class="result-statistics">
+            <div>
+                <span>Parejas</span>
+                <strong id="result-pairs">
+                    16 / 16
+                </strong>
+            </div>
+
+            <div>
+                <span>Combo máximo</span>
+                <strong id="result-combo">
+                    ×0
+                </strong>
+            </div>
+
+            <div>
+                <span>Puntuación</span>
+                <strong id="result-score">
+                    0
+                </strong>
+            </div>
+
+            <div>
+                <span>Tiempo</span>
+                <strong id="result-time">
+                    00:00
+                </strong>
+            </div>
+        </div>
+
+        <div class="result-actions">
+            <button
+                    id="play-again"
+                    class="play-again-button"
+                    type="button"
+            >
+                REVANCHA
+            </button>
+
+            <a
+                    class="result-exit-button"
+                    th:href="@{/}"
+            >
+                SALIR
+            </a>
+        </div>
+    </section>
+</div>
+
+</body>
+</html>
