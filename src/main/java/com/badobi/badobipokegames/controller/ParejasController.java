@@ -131,7 +131,7 @@ public class ParejasController {
                 "guardado",
                 rankingService.buscarJugador(jugadorToken) != null,
                 "experiencia",
-                Math.min(5_000, 200 + puntuacionSegura / 2)
+                200 + puntuacionSegura / 2
         );
     }
 }

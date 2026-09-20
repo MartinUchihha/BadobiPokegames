@@ -86,7 +86,10 @@ public class RankingGlobalService {
                 .map(record -> crearFila(
                         record.getJugador(),
                         record.getPuntuacion(),
-                        record.getExperiencia()
+                        calcularExperiencia(
+                                record.getJuego(),
+                                record.getPuntuacion()
+                        )
                 ))
                 .toList();
     }
@@ -110,7 +113,11 @@ public class RankingGlobalService {
         for (RecordRanking record : resultados) {
             Long id = record.getJugador().getId();
             participantes.put(id, record.getJugador());
-            experiencia.merge(id, record.getExperiencia(), Integer::sum);
+            int experienciaActual = calcularExperiencia(
+                    record.getJuego(),
+                    record.getPuntuacion()
+            );
+            experiencia.merge(id, experienciaActual, Integer::sum);
         }
 
         List<Map.Entry<Long, Integer>> orden = new ArrayList<>(experiencia.entrySet());
@@ -136,7 +143,7 @@ public class RankingGlobalService {
             case "pokedle", "pokezoom", "sonidos", "movimientos", "adivina-estadisticas", "silueta" -> puntuacion * 100;
             case "fusion" -> puntuacion * 10;
             case "silueta-tiempo" -> puntuacion * 150;
-            case "pokematch" -> Math.min(5_000, 200 + puntuacion / 2);
+            case "pokematch" -> 200 + puntuacion / 2;
             default -> puntuacion;
         };
     }
