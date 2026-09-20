@@ -25,7 +25,7 @@ public class JugadorRanking {
     @Column(nullable = false, unique = true, length = 30)
     private String nombreNormalizado;
 
-    @Column(nullable = false, length = 8)
+    @Column(nullable = false, length = 50)
     private String avatar;
 
     @Column(nullable = false)
@@ -51,6 +51,12 @@ public class JugadorRanking {
     public String getAvatar() { return avatar; }
     public Instant getCreadoEn() { return creadoEn; }
     public int getMedallas() { return medallas; }
+    public void cambiarAvatar(String avatar) {
+        if (avatar == null || avatar.isBlank() || avatar.length() > 50) {
+            throw new IllegalArgumentException("Avatar no válido");
+        }
+        this.avatar = avatar;
+    }
     public void sumarMedallas(int cantidad) { medallas += Math.max(0, cantidad); }
     public void gastarMedallas(int cantidad) {
         if (cantidad < 0 || medallas < cantidad) throw new IllegalArgumentException("No tienes suficientes medallas");

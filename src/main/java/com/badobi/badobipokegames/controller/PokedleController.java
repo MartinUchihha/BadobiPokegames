@@ -203,7 +203,7 @@ public class PokedleController {
                 session.setAttribute("pokedleGlobalRegistrada", true);
                 logrosService.incrementar(jugadorToken, "partidas", 1);
                 if (acierto) {
-                    logrosService.actualizarMaximo(jugadorToken, "victorias", 1);
+                    logrosService.incrementar(jugadorToken, "victorias", 1);
                     logrosService.incrementar(jugadorToken, "pokedle-victorias", 1);
                     if (cantidadIntentos == 1) logrosService.actualizarMaximo(jugadorToken, "pokedle-mejor", 1);
                     rankingService.registrarMejor(jugadorToken, "pokedle", Math.max(1, 20 - cantidadIntentos));

@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function showProfile(profile) {
         currentName = profile.nombre;
         playerName.textContent = profile.nombre;
-        playerAvatar.textContent = profile.avatar;
+        renderAvatar(playerAvatar, profile.avatar, profile.nombre);
         profileCreate.hidden = true;
         profileReady.hidden = false;
     }
@@ -91,7 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
             pokezoom: "Eficiencia",
             sonidos: "Eficiencia",
             movimientos: "Eficiencia",
-            "adivina-estadisticas": "Eficiencia"
+            "adivina-estadisticas": "Eficiencia",
+            pokematch: "Puntuación"
         };
         scoreHeading.textContent = headings[gameSelect.value] || "Puntuación";
         if (rows.length === 0) {
@@ -108,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const trainer = document.createElement("td");
             const avatar = document.createElement("span");
             avatar.className = "table-avatar";
-            avatar.textContent = entry.avatar;
+            renderAvatar(avatar, entry.avatar, entry.nombre);
             const name = document.createElement("strong");
             name.textContent = entry.nombre;
             trainer.append(avatar, name);
@@ -135,4 +136,30 @@ document.addEventListener("DOMContentLoaded", () => {
             .format(new Date(`${value}T12:00:00`));
     }
     function capitalize(value) { return value.charAt(0).toUpperCase() + value.slice(1); }
+
+    function renderAvatar(container, avatar, trainerName) {
+        container.replaceChildren();
+
+        if (avatar?.startsWith("pokemon-")) {
+            const pokemonId = Number(avatar.slice("pokemon-".length));
+            const image = document.createElement("img");
+            image.src = pokemonSprite(pokemonId);
+            image.alt = `Avatar de ${trainerName}`;
+            image.loading = "lazy";
+            image.draggable = false;
+            image.addEventListener("error", () => {
+                container.textContent = "⚡";
+            }, { once: true });
+            container.appendChild(image);
+            return;
+        }
+
+        container.textContent = avatar || "⚡";
+    }
+
+    function pokemonSprite(pokemonId) {
+        return "https://raw.githubusercontent.com/"
+            + "PokeAPI/sprites/master/sprites/pokemon/"
+            + `${pokemonId}.png`;
+    }
 });

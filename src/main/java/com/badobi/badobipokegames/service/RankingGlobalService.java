@@ -136,6 +136,7 @@ public class RankingGlobalService {
             case "pokedle", "pokezoom", "sonidos", "movimientos", "adivina-estadisticas", "silueta" -> puntuacion * 100;
             case "fusion" -> puntuacion * 10;
             case "silueta-tiempo" -> puntuacion * 150;
+            case "pokematch" -> Math.min(5_000, 200 + puntuacion / 2);
             default -> puntuacion;
         };
     }

@@ -159,7 +159,7 @@ public class AdivinaEstadisticasController {
         if (partida.isTerminada()) {
             logrosService.incrementar(jugadorToken, "partidas", 1);
             if (partida.isVictoria()) {
-                logrosService.actualizarMaximo(jugadorToken, "victorias", 1);
+                logrosService.incrementar(jugadorToken, "victorias", 1);
                 rankingService.registrarMejor(jugadorToken, "adivina-estadisticas", PartidaEstadisticas.MAX_INTENTOS + 1 - partida.getNumeroIntentos());
             }
             PokemonHigherLower solucion =

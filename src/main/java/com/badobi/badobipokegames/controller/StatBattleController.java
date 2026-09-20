@@ -74,7 +74,7 @@ public class StatBattleController {
         if (partida.isTerminada()) {
             logrosService.incrementar(jugadorToken, "partidas", 1);
             if (partida.isVictoria()) {
-                logrosService.actualizarMaximo(jugadorToken, "victorias", 1);
+                logrosService.incrementar(jugadorToken, "victorias", 1);
                 logrosService.incrementar(jugadorToken, "stat-victorias", 1);
                 if (partida.getPuntosRival() == 0) logrosService.incrementar(jugadorToken, "stat-perfectas", 1);
                 rankingService.registrarMejor(jugadorToken, "stat-battle", 400 - partida.getPuntosRival() * 50);

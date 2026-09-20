@@ -96,7 +96,7 @@ public class FusionController {
         if (encontrados.size() == fusion.getPokemon().size() && !Boolean.TRUE.equals(session.getAttribute(claveRegistrada))) {
             session.setAttribute(claveRegistrada, true);
             logrosService.incrementar(jugadorToken, "partidas", 1);
-            logrosService.actualizarMaximo(jugadorToken, "victorias", 1);
+            logrosService.incrementar(jugadorToken, "victorias", 1);
             logrosService.incrementar(jugadorToken, "fusion-victorias", 1);
             rankingService.registrarMejor(jugadorToken, "fusion", 100);
         }

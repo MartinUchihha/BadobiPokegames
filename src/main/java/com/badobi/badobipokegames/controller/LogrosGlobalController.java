@@ -15,4 +15,9 @@ public class LogrosGlobalController{
         try{return ResponseEntity.ok(service.canjear(token,recompensa));}
         catch(IllegalArgumentException e){return ResponseEntity.badRequest().body(Map.of("error",e.getMessage()));}
     }
+    @PostMapping("/api/logros/equipar-avatar")
+    public ResponseEntity<Map<String,Object>> equiparAvatar(@RequestParam String recompensa,@CookieValue(name=RankingGlobalService.COOKIE,required=false)String token){
+        try{return ResponseEntity.ok(service.equiparAvatar(token,recompensa));}
+        catch(IllegalArgumentException e){return ResponseEntity.badRequest().body(Map.of("error",e.getMessage()));}
+    }
 }

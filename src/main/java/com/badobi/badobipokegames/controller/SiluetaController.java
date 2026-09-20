@@ -133,7 +133,7 @@ public class SiluetaController {
             session.setAttribute("siluetaClasicaRegistrada", true);
             logrosService.incrementar(jugadorToken, "partidas", 1);
             if (partida.isVictoria()) {
-                logrosService.actualizarMaximo(jugadorToken, "victorias", 1);
+                logrosService.incrementar(jugadorToken, "victorias", 1);
                 logrosService.incrementar(jugadorToken, "silueta-aciertos", 1);
                 rankingService.registrarMejor(jugadorToken, "silueta", PartidaSilueta.MAX_INTENTOS + 1 - partida.getNumeroIntentos());
             }
@@ -402,7 +402,7 @@ public class SiluetaController {
         session.setAttribute("siluetaTiempoRegistrada", true);
         logrosService.incrementar(token, "partidas", 1);
         logrosService.actualizarMaximo(token, "silueta-racha", ronda.getMejorRacha());
-        if (ronda.getPuntos() > 0) logrosService.actualizarMaximo(token, "victorias", 1);
+        if (ronda.getPuntos() > 0) logrosService.incrementar(token, "victorias", 1);
         rankingService.registrarMejor(token, "silueta-tiempo", ronda.getPuntos());
     }
 

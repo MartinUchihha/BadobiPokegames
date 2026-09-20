@@ -135,7 +135,7 @@ public class SonidoController {
         if (partida.isTerminada()) {
             logrosService.incrementar(jugadorToken, "partidas", 1);
             if (partida.isVictoria()) {
-                logrosService.actualizarMaximo(jugadorToken, "victorias", 1);
+                logrosService.incrementar(jugadorToken, "victorias", 1);
                 logrosService.incrementar(jugadorToken, "sonido-aciertos", 1);
                 rankingService.registrarMejor(jugadorToken, "sonidos", PartidaSonido.MAX_INTENTOS + 1 - partida.getNumeroIntentos());
             }

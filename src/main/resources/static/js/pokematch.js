@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const versusHeader = document.querySelector(".versus-header");
     const versusBadge = document.querySelector("#match-versus-badge");
     const rivalStatus = document.querySelector("#rival-status");
+    const playerAvatar = document.querySelector(".player-user .player-avatar");
+    const playerName = document.querySelector("#player-name");
     const rivalAvatar = document.querySelector(".rival-avatar");
     const rivalName = document.querySelector("#rival-name");
     const rivalDifficulty = document.querySelector("#rival-difficulty");
@@ -63,9 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let gameActive = false;
     let processingSelection = false;
+    let resultReported = false;
     let timerInterval = null;
     let rivalTimeout = null;
     let messageTimeout = null;
+
+    loadPlayerProfile();
 
     modeCards.forEach((card) => {
         card.addEventListener("click", () => {
@@ -193,6 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
         remainingSeconds = match.duracionSegundos;
         gameActive = false;
         processingSelection = true;
+        resultReported = false;
 
         setup.hidden = true;
         gameSection.hidden = false;
@@ -260,6 +266,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
         image.src = imageUrl;
         rivalAvatar.appendChild(image);
+    }
+
+    async function loadPlayerProfile() {
+        try {
+            const response = await fetch("/api/ranking/perfil");
+            const profile = await response.json();
+
+            if (!profile.registrado) {
+                return;
+            }
+
+            playerName.textContent = profile.nombre;
+            renderPlayerAvatar(profile.avatar, profile.nombre);
+        } catch (error) {
+            console.warn("No se pudo cargar el perfil del entrenador");
+        }
+    }
+
+    function renderPlayerAvatar(avatar, name) {
+        playerAvatar.replaceChildren();
+
+        if (!avatar?.startsWith("pokemon-")) {
+            playerAvatar.textContent = avatar || "🧢";
+            return;
+        }
+
+        const pokemonId = Number(avatar.slice("pokemon-".length));
+        const image = document.createElement("img");
+        image.src = "https://raw.githubusercontent.com/"
+            + "PokeAPI/sprites/master/sprites/pokemon/"
+            + `${pokemonId}.png`;
+        image.alt = `Avatar de ${name}`;
+        image.draggable = false;
+        image.addEventListener("error", () => {
+            playerAvatar.textContent = "🧢";
+        }, { once: true });
+        playerAvatar.appendChild(image);
     }
 
     function renderBoard() {
@@ -611,6 +654,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stopProcesses();
 
         const result = determineResult(reason);
+        reportResult(reason);
 
         resultIcon.textContent = result.icon;
         resultEyebrow.textContent = result.eyebrow;
@@ -626,6 +670,54 @@ document.addEventListener("DOMContentLoaded", () => {
         window.setTimeout(() => {
             resultOverlay.hidden = false;
         }, 300);
+    }
+
+    async function reportResult(reason) {
+        if (resultReported || !match) {
+            return;
+        }
+
+        resultReported = true;
+
+        try {
+            const response = await fetch("/api/pokematch/resultado", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams({
+                    puntuacion: String(points),
+                    parejas: String(playerPairs),
+                    totalFichas: String(match.totalFichas),
+                    combo: String(maximumCombo),
+                    victoria: String(didPlayerWin(reason)),
+                    modo: match.modo || "INDIVIDUAL",
+                    nivelRival: match.nivelRival || ""
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("No se pudo guardar el resultado");
+            }
+        } catch (error) {
+            console.warn(error.message);
+        }
+    }
+
+    function didPlayerWin(reason) {
+        if (reason === "player_completed") {
+            return true;
+        }
+
+        if (reason === "rival_completed" || !isVersusMode()) {
+            return false;
+        }
+
+        if (playerPairs !== rivalPairsFound) {
+            return playerPairs > rivalPairsFound;
+        }
+
+        return points > rivalPoints;
     }
 
     function determineResult(reason) {
