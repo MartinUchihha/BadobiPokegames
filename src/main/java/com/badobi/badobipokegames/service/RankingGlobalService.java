@@ -66,8 +66,20 @@ public class RankingGlobalService {
 
         if (record == null) {
             records.save(new RecordRanking(jugador, juego, temporada, puntuacion, experiencia));
-        } else if (puntuacion > record.getPuntuacion()) {
-            record.actualizar(puntuacion, experiencia);
+        } else {
+            int experienciaAnterior = experienciaActual(record);
+            int experienciaAcumulada = sumarExperiencia(
+                    experienciaAnterior,
+                    experiencia
+            );
+            int mejorPuntuacion = Math.max(
+                    record.getPuntuacion(),
+                    puntuacion
+            );
+            record.actualizar(
+                    mejorPuntuacion,
+                    experienciaAcumulada
+            );
             records.save(record);
         }
     }
@@ -86,10 +98,7 @@ public class RankingGlobalService {
                 .map(record -> crearFila(
                         record.getJugador(),
                         record.getPuntuacion(),
-                        calcularExperiencia(
-                                record.getJuego(),
-                                record.getPuntuacion()
-                        )
+                        experienciaActual(record)
                 ))
                 .toList();
     }
@@ -113,11 +122,11 @@ public class RankingGlobalService {
         for (RecordRanking record : resultados) {
             Long id = record.getJugador().getId();
             participantes.put(id, record.getJugador());
-            int experienciaActual = calcularExperiencia(
-                    record.getJuego(),
-                    record.getPuntuacion()
+            experiencia.merge(
+                    id,
+                    experienciaActual(record),
+                    this::sumarExperiencia
             );
-            experiencia.merge(id, experienciaActual, Integer::sum);
         }
 
         List<Map.Entry<Long, Integer>> orden = new ArrayList<>(experiencia.entrySet());
@@ -146,6 +155,23 @@ public class RankingGlobalService {
             case "pokematch" -> 200 + puntuacion / 2;
             default -> puntuacion;
         };
+    }
+
+    private int experienciaActual(RecordRanking record) {
+        return Math.max(
+                record.getExperiencia(),
+                calcularExperiencia(
+                        record.getJuego(),
+                        record.getPuntuacion()
+                )
+        );
+    }
+
+    private int sumarExperiencia(int actual, int ganada) {
+        return (int) Math.min(
+                Integer.MAX_VALUE,
+                (long) actual + ganada
+        );
     }
 
     private String claveTemporada() {
