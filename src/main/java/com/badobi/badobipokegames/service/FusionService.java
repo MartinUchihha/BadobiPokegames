@@ -166,6 +166,61 @@ public class FusionService {
                             "Frosmoth",
                             "Ambipom"
                     )
+            ),
+
+            new FusionDiaria(
+                    LocalDate.of(2026, 9, 21),
+                    "fusions/fusion-002.png",
+                    List.of(
+                            "Snorlax",
+                            "Gengar",
+                            "Leafeon",
+                            "Slowbro"
+                    )
+            ),
+
+            new FusionDiaria(
+                    LocalDate.of(2026, 9, 22),
+                    "fusions/fusion-009.png",
+                    List.of(
+                            "Wailord",
+                            "Krookodile",
+                            "Chandelure",
+                            "Tsareena"
+                    )
+            ),
+
+            new FusionDiaria(
+                    LocalDate.of(2026, 9, 23),
+                    "fusions/fusion-010.png",
+                    List.of(
+                            "Reuniclus",
+                            "Dusknoir",
+                            "Clawitzer",
+                            "Jumpluff"
+                    )
+            ),
+
+            new FusionDiaria(
+                    LocalDate.of(2026, 9, 24),
+                    "fusions/fusion-012.png",
+                    List.of(
+                            "Orthworm",
+                            "Banette",
+                            "Masquerain",
+                            "Cacturne"
+                    )
+            ),
+
+            new FusionDiaria(
+                    LocalDate.of(2026, 9, 25),
+                    "fusions/fusion-013.png",
+                    List.of(
+                            "Araquanid",
+                            "Runerigus",
+                            "Bruxish",
+                            "Pawniard"
+                    )
             )
     );
 
