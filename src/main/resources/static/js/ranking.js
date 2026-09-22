@@ -92,7 +92,8 @@ document.addEventListener("DOMContentLoaded", () => {
             sonidos: "Eficiencia",
             movimientos: "Eficiencia",
             "adivina-estadisticas": "Eficiencia",
-            pokematch: "Puntuación"
+            pokematch: "Puntuación",
+            pokesort: "Mejor partida"
         };
         scoreHeading.textContent = headings[gameSelect.value] || "Puntuación";
         if (rows.length === 0) {

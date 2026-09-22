@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéSort · Niveles | Badobi Pokégames</title>
+    <meta name="description" content="Ordena Poké Balls, pociones y peluches Pokémon. Forma tríos antes de que se acabe el tiempo.">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/pokesort-game.css}">
+</head>
+<body>
+<header class="main-header">
+    <a class="logo" th:href="@{/}">Badobi <span>Pokégames</span></a>
+    <nav class="main-nav" aria-label="Navegación principal">
+        <a th:href="@{/}">Juegos</a>
+        <a th:href="@{/estadisticas}">Estadísticas</a>
+        <a th:href="@{/ranking}">Ranking</a>
+        <a th:href="@{/logros}">Logros</a>
+    </nav>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Activar tema oscuro">🌙</button>
+</header>
+
+<main class="sort-page">
+    <div class="sort-layout">
+        <div class="sort-intro">
+            <a class="sort-back" th:href="@{/pokesort}">← Volver a los niveles</a>
+            <p id="sort-level-label" class="sort-kicker">PokéSort · Nivel 1 de 20</p>
+            <h1>Ordena los estantes</h1>
+            <p>Elige un producto y toca otro estante para moverlo. Tres iguales desaparecen; algunos estantes esconden más productos detrás.</p>
+            <p>Al completar un nivel ganas experiencia y avanzas en los logros de PokéSort. Para guardarlos, crea tu entrenador en <a th:href="@{/ranking}">Ranking</a>. Puedes canjear medallas por un avatar de Rowlet en <a th:href="@{/logros}">Logros y tienda</a>.</p>
+        </div>
+
+        <section class="sort-status" aria-label="Estado de la partida">
+            <div><span>Tiempo</span><strong id="sort-timer">03:00</strong></div>
+            <div><span>Tríos</span><strong id="sort-matches">0 / 8</strong></div>
+            <div><span>Productos</span><strong id="sort-remaining">24</strong></div>
+            <button id="sort-pause" type="button" disabled>Pausar</button>
+        </section>
+
+        <section class="sort-cabinet" aria-label="Estantes de productos">
+            <div id="sort-shelves" class="sort-shelves"></div>
+        </section>
+
+        <p id="sort-message" class="sort-message" role="status" aria-live="polite">
+            Toca un producto y después un estante que tenga espacio.
+        </p>
+    </div>
+
+    <div id="sort-overlay" class="sort-overlay">
+        <div class="sort-dialog" role="dialog" aria-modal="true" aria-labelledby="sort-dialog-title">
+            <span id="sort-dialog-icon" class="sort-dialog-icon" aria-hidden="true">🛍️</span>
+            <p id="sort-dialog-level" class="sort-dialog-kicker">PokéSort · Nivel 1</p>
+            <h2 id="sort-dialog-title">¡Bienvenido a la tienda!</h2>
+            <p id="sort-dialog-text">Tienes 3 minutos para reunir 8 tríos. Selecciona un producto y muévelo a otro estante con espacio. Tres iguales en el mismo compartimento desaparecen.</p>
+            <button id="sort-dialog-action" class="sort-dialog-action" type="button">Comenzar</button>
+            <button id="sort-dialog-replay" class="sort-dialog-replay" type="button" hidden>Repetir nivel</button>
+            <a th:href="@{/pokesort}">Ver los 20 niveles</a>
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>Badobi Pokégames — Creado por <a href="https://www.youtube.com/@Badobipkm" target="_blank" rel="noopener noreferrer">Badobi</a></p>
+    <p class="fan-disclaimer">Proyecto fan no oficial, sin afiliación con Nintendo, Game Freak, Creatures Inc. ni The Pokémon Company.</p>
+    <p class="api-credit">Imágenes de objetos obtenidas de <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer">PokéAPI</a>.</p>
+</footer>
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/pokesort-levels.js}"></script>
+<script th:src="@{/js/pokesort-game.js}"></script>
+</body>
+</html>

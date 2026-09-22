@@ -1,0 +1,228 @@
+.pokesort-page {
+    display: grid;
+    justify-items: center;
+    gap: 14px;
+    padding: clamp(16px, 4vw, 40px) 12px 48px;
+    background: radial-gradient(circle at 50% 15%, #354d87 0, #182443 50%, #10182b 100%);
+}
+
+.pokesort-frame {
+    position: relative;
+    width: min(100%, 560px);
+    aspect-ratio: 1536 / 2752;
+    overflow: hidden;
+    isolation: isolate;
+    border: 3px solid #1b3766;
+    border-radius: 26px;
+    background: #34415c;
+    box-shadow: 0 24px 60px rgba(2, 10, 31, 0.45);
+}
+
+.pokesort-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pokesort-frame::after {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(11, 28, 60, 0.16) 0%,
+        transparent 34%,
+        transparent 78%,
+        rgba(8, 20, 42, 0.38) 100%
+    );
+    content: "";
+    pointer-events: none;
+}
+
+.pokesort-heading {
+    position: absolute;
+    z-index: 1;
+    top: 11%;
+    left: 4%;
+    width: 92%;
+    text-align: center;
+}
+
+.pokesort-heading p {
+    margin-bottom: 0.2em;
+    color: #fff5d9;
+    font-size: clamp(0.65rem, 2.4vw, 0.9rem);
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-shadow: 0 2px 5px #182443;
+    text-transform: uppercase;
+}
+
+.pokesort-heading h1 {
+    color: #124a9d;
+    font-size: clamp(2.9rem, 11vw, 5rem);
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1.05;
+    -webkit-text-stroke: 2px #d62d3b;
+    paint-order: stroke fill;
+    text-shadow: 2px 4px 0 #102a58, 4px 7px 11px rgba(5, 17, 41, 0.7);
+}
+
+.pokesort-level {
+    position: absolute;
+    z-index: 1;
+    top: 60.7%;
+    left: 50%;
+    padding: 0.3em 1em;
+    transform: translateX(-50%);
+    border: 2px solid #ffda73;
+    border-radius: 999px;
+    background: #173d82;
+    box-shadow: 0 3px 0 #09244e, 0 7px 16px rgba(0, 0, 0, 0.38);
+    color: white;
+    font-size: clamp(0.85rem, 3vw, 1.15rem);
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.pokesort-start {
+    position: absolute;
+    z-index: 1;
+    bottom: 3.5%;
+    left: 50%;
+    display: grid;
+    gap: 2px;
+    width: min(66%, 340px);
+    padding: 0.55em 0.8em;
+    transform: translateX(-50%);
+    border: 3px solid #fff4bd;
+    border-radius: 18px;
+    background: linear-gradient(#ffdd4d, #efaa17);
+    box-shadow: 0 6px 0 #9d5719, 0 12px 25px rgba(0, 0, 0, 0.4);
+    color: #17325e;
+    font: inherit;
+    font-size: clamp(1rem, 3.8vw, 1.5rem);
+    font-weight: 900;
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.pokesort-start:hover,
+.pokesort-start:focus-visible {
+    transform: translateX(-50%) translateY(-3px);
+    filter: brightness(1.08);
+}
+
+.pokesort-start small {
+    font-size: 0.48em;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.pokesort-note {
+    max-width: 560px;
+    color: #e8eefb;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.pokesort-level-map {
+    width: min(100%, 760px);
+    margin-top: 12px;
+    padding: 22px;
+    border: 1px solid #5271aa;
+    border-radius: 20px;
+    background: #1b2d51;
+    color: #f6f8ff;
+}
+
+.pokesort-map-heading {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.pokesort-map-heading p {
+    color: #ffd16a;
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.pokesort-map-heading h2 {
+    margin: 5px 0;
+}
+
+.pokesort-map-heading span {
+    color: #c9d7f4;
+    font-size: 0.85rem;
+}
+
+.pokesort-level-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.pokesort-level-card {
+    display: grid;
+    align-content: center;
+    gap: 5px;
+    min-height: 88px;
+    padding: 10px;
+    border: 2px solid #536ea2;
+    border-radius: 12px;
+    background: #263e6d;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+}
+
+.pokesort-level-card strong {
+    font-size: 1.35rem;
+}
+
+.pokesort-level-card span {
+    font-size: 0.68rem;
+    line-height: 1.25;
+}
+
+.pokesort-level-card.available:hover,
+.pokesort-level-card.available:focus-visible {
+    border-color: #ffdc69;
+    transform: translateY(-2px);
+}
+
+.pokesort-level-card.current {
+    border-color: #ffe178;
+    background: #325aa0;
+    box-shadow: 0 0 0 2px #8f6219;
+}
+
+.pokesort-level-card.locked {
+    opacity: 0.55;
+}
+
+@media (max-width: 600px) {
+    .pokesort-level-map { padding: 15px; }
+    .pokesort-level-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+    .pokesort-level-card { min-height: 75px; padding: 6px; }
+}
+
+@media (max-width: 380px) {
+    .pokesort-level-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 480px) {
+    .pokesort-frame {
+        border-radius: 16px;
+    }
+
+    .pokesort-heading h1 {
+        -webkit-text-stroke-width: 1.5px;
+    }
+}

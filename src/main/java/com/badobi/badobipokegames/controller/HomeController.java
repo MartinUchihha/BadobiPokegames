@@ -22,4 +22,14 @@ public class HomeController {
     public String mostrarRanking() {
         return "ranking";
     }
+
+    @GetMapping("/pokesort")
+    public String mostrarPokeSort() {
+        return "pokesort";
+    }
+
+    @GetMapping("/pokesort/jugar")
+    public String jugarPokeSort() {
+        return "pokesort-game";
+    }
 }

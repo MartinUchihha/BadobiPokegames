@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéSort | Badobi Pokégames</title>
+    <meta name="description" content="Juega PokéSort: ordena Poké Balls, pociones y peluches Pokémon antes de que se acabe el tiempo.">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/pokesort.css}">
+</head>
+<body>
+<header class="main-header">
+    <a class="logo" th:href="@{/}">Badobi <span>Pokégames</span></a>
+    <nav class="main-nav" aria-label="Navegación principal">
+        <a th:href="@{/}">Juegos</a>
+        <a th:href="@{/estadisticas}">Estadísticas</a>
+        <a th:href="@{/ranking}">Ranking</a>
+        <a th:href="@{/logros}">Logros</a>
+    </nav>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Activar tema oscuro">🌙</button>
+</header>
+
+<main class="pokesort-page">
+    <section class="pokesort-frame" aria-labelledby="pokesort-title">
+        <img class="pokesort-art" th:src="@{/images/pokesort-store.jpeg}"
+             alt="Tienda Pokémon en una calle de Nueva York al atardecer, con Poké Balls, pociones y peluches en los escaparates y Spider-Man a la derecha">
+
+        <div class="pokesort-heading">
+            <p>La tienda te espera</p>
+            <h1 id="pokesort-title">PokéSort</h1>
+        </div>
+
+        <div id="pokesort-current-level" class="pokesort-level">Nivel 1</div>
+
+        <a id="pokesort-continue" class="pokesort-start" th:href="@{/pokesort/jugar(nivel=1)}">
+            <span id="pokesort-continue-label">Jugar nivel 1</span>
+            <small>Ordena la tienda</small>
+        </a>
+    </section>
+    <p class="pokesort-note">20 niveles con nuevos tableros cada vez que juegas. Vacía los estantes para descubrir los productos ocultos.</p>
+    <section class="pokesort-level-map" aria-labelledby="pokesort-level-map-title">
+        <div class="pokesort-map-heading">
+            <p>Tu recorrido</p>
+            <h2 id="pokesort-level-map-title">Elige un nivel</h2>
+            <span>Tu avance se guarda en este navegador.</span>
+        </div>
+        <div id="pokesort-level-grid" class="pokesort-level-grid"></div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>Badobi Pokégames — Creado por <a href="https://www.youtube.com/@Badobipkm" target="_blank" rel="noopener noreferrer">Badobi</a></p>
+    <p class="fan-disclaimer">Proyecto fan no oficial, sin afiliación con Nintendo, Game Freak, Creatures Inc. ni The Pokémon Company.</p>
+</footer>
+<script th:src="@{/js/theme.js}"></script>
+<script th:src="@{/js/pokesort-levels.js}"></script>
+<script th:src="@{/js/pokesort-map.js}"></script>
+</body>
+</html>

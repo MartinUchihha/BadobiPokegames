@@ -153,6 +153,7 @@ public class RankingGlobalService {
             case "fusion" -> puntuacion * 10;
             case "silueta-tiempo" -> puntuacion * 150;
             case "pokematch" -> 200 + puntuacion / 2;
+            case "pokesort" -> puntuacion;
             default -> puntuacion;
         };
     }
